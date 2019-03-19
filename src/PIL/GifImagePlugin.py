@@ -444,8 +444,7 @@ def _write_multiple_frames(im, fp, palette):
             if im_frames:
                 # delta frame
                 previous = im_frames[-1]
-                if "disposal" in encoderinfo \
-                   and encoderinfo["disposal"] == 2:
+                if encoderinfo.get("disposal") == 2:
                     base_image = background
                 else:
                     base_image = previous["im"]
@@ -457,8 +456,7 @@ def _write_multiple_frames(im, fp, palette):
                     delta = ImageChops.subtract_modulo(
                         im_frame.convert('RGB'), base_image.convert('RGB'))
                 bbox = delta.getbbox()
-                if not bbox and not ("disposal" in encoderinfo
-                   and encoderinfo["disposal"] == 2):
+                if not bbox and encoderinfo.get("disposal") != 2:
                     # This frame is identical to the previous frame
                     if duration:
                         previous['encoderinfo']['duration'] += \
@@ -476,8 +474,7 @@ def _write_multiple_frames(im, fp, palette):
     if len(im_frames) > 1:
         for frame_data in im_frames:
             im_frame = frame_data['im']
-            if("disposal" in frame_data["encoderinfo"]
-               and frame_data["encoderinfo"]["disposal"] == 2):
+            if frame_data["encoderinfo"].get("disposal") == 2:
                 frame_data['encoderinfo']['include_color_table'] = True
             if not frame_data['bbox']:
                 # global header
