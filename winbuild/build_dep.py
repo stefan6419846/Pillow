@@ -249,12 +249,14 @@ def build_lcms_71(compiler):
     return r"""
 rem Build lcms2
 setlocal
+echo "lcms71 a"
 rd /S /Q %%LCMS%%\Lib
 rd /S /Q %%LCMS%%\Projects\VC%(vc_version)s\Release
-%%MSBUILD%% %%LCMS%%\Projects\VC%(vc_version)s\lcms2.sln /t:Clean /p:Configuration="Release" /p:Platform=%(platform)s /m
-%%MSBUILD%% %%LCMS%%\Projects\VC%(vc_version)s\lcms2.sln /t:lcms2_static /p:Configuration="Release" /p:Platform=%(platform)s /m
+%%MSBUILD%% %%LCMS%%\Projects\VC%(vc_version)s\lcms2.sln /t:Clean /p:Configuration="Release" /p:Platform=%(platform)s /p:PlatformToolset=v100 /m
+%%MSBUILD%% %%LCMS%%\Projects\VC%(vc_version)s\lcms2.sln /t:lcms2_static /p:Configuration="Release" /p:Platform=%(platform)s /p:PlatformToolset=v100 /m
 xcopy /Y /E /Q %%LCMS%%\include %%INCLIB%%
 copy /Y /B %%LCMS%%\Lib\MS\*.lib %%INCLIB%%
+echo "lcms71 g"
 endlocal
 """ % compiler  # noqa: E501
 
@@ -286,13 +288,7 @@ endlocal
 def add_compiler(compiler, bit):
     script.append(setup_compiler(compiler))
     script.append(nmake_libs(compiler, bit))
-
-    # script.append(extract_openjpeg(compiler))
-
-    script.append(msbuild_freetype(compiler))
     script.append(build_lcms2(compiler))
-    # script.append(nmake_openjpeg(compiler))
-    script.append(build_ghostscript(compiler, bit))
     script.append(end_compiler())
 
 

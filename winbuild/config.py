@@ -38,9 +38,9 @@ libs = {
         'dir': 'freetype-2.10.0',
     },
     'lcms': {
-        'url': SF_MIRROR+'/project/lcms/lcms/2.7/lcms2-2.7.zip',
-        'filename': PILLOW_DEPENDS_DIR + 'lcms2-2.7.zip',
-        'dir': 'lcms2-2.7',
+        'url': SF_MIRROR+'/project/lcms/lcms/2.9/lcms2-2.9.zip',
+        'filename': PILLOW_DEPENDS_DIR + 'lcms2-2.9.zip',
+        'dir': 'lcms2-2.9',
     },
     'ghostscript': {
         'url': 'https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs926/ghostscript-9.26.tar.gz',  # noqa: E501
