@@ -251,7 +251,8 @@ rem Build lcms2
 setlocal
 echo "lcms71 a"
 rd /S /Q %%LCMS%%\Lib
-rd /S /Q %%LCMS%%\Projects\VC%(vc_version)s\Release""" % compiler
+rd /S /Q %%LCMS%%\Projects\VC%(vc_version)s\Release
+""" % compiler
     x += 'set PATH="C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%"'
     x += r"""
 %%MSBUILD%% %%LCMS%%\Projects\VC%(vc_version)s\lcms2.sln /t:Clean /p:Configuration="Release" /p:Platform=%(platform)s /m
