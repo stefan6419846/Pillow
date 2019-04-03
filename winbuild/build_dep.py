@@ -252,8 +252,8 @@ setlocal
 echo "lcms71 a"
 rd /S /Q %%LCMS%%\Lib
 rd /S /Q %%LCMS%%\Projects\VC%(vc_version)s\Release
-%%MSBUILD%% %%LCMS%%\Projects\VC%(vc_version)s\lcms2.sln /t:Clean /p:Configuration="Release" /p:Platform=%(platform)s /p:PlatformToolset=v140 /m
-%%MSBUILD%% %%LCMS%%\Projects\VC%(vc_version)s\lcms2.sln /t:lcms2_static /p:Configuration="Release" /p:Platform=%(platform)s /p:PlatformToolset=v140 /m
+%%MSBUILD%% %%LCMS%%\Projects\VC%(vc_version)s\lcms2.sln /t:Clean /p:Configuration="Release" /p:Platform=%(platform)s /p:PlatformToolset=v110 /m
+%%MSBUILD%% %%LCMS%%\Projects\VC%(vc_version)s\lcms2.sln /t:lcms2_static /p:Configuration="Release" /p:Platform=%(platform)s /p:PlatformToolset=v110 /m
 xcopy /Y /E /Q %%LCMS%%\include %%INCLIB%%
 copy /Y /B %%LCMS%%\Lib\MS\*.lib %%INCLIB%%
 echo "lcms71 g"
