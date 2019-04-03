@@ -262,6 +262,7 @@ copy /Y /B %%LCMS%%\Lib\MS\*.lib %%INCLIB%%
 echo "lcms71 g"
 endlocal
 """ % compiler  # noqa: E501
+    return x
 
 
 def build_ghostscript(compiler, bit):
