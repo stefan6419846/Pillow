@@ -250,6 +250,8 @@ def build_lcms_71(compiler):
 rem Build lcms2
 setlocal
 echo "lcms71 a"
+dir "C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0"
+echo "torchwood"
 rd /S /Q %%LCMS%%\Lib
 rd /S /Q %%LCMS%%\Projects\VC%(vc_version)s\Release
 """ % compiler
