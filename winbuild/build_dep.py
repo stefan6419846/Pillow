@@ -251,6 +251,7 @@ rem Build lcms2
 setlocal
 """ + vc_setup(compiler, bit) + r"""
 echo "lcms71 a"
+copy /Y /B "C:\Program Files (x86)\MSBuild\12.0\Bin\Microsoft.Build.Tasks.v12.0.dll" :C:\Program Files (x86)\MSBuild\14.0\bin\amd64\Microsoft.Build.Tasks.v12.0.dll"
 dir "C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0"
 echo "torchwood"
 rd /S /Q %%LCMS%%\Lib
