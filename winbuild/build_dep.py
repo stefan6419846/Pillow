@@ -257,7 +257,7 @@ echo "torchwood"
 rd /S /Q %%LCMS%%\Lib
 rd /S /Q %%LCMS%%\Projects\VC%(vc_version)s\Release
 """ % compiler
-    x += 'set PATH="C:\Program Files (x86)\MSBuild\\12.0\Bin;%PATH%"'
+    #x += 'set PATH="C:\Program Files (x86)\MSBuild\\12.0\Bin;%PATH%"'
     x += r"""
 %%MSBUILD%% %%LCMS%%\Projects\VC%(vc_version)s\lcms2.sln /t:Clean /p:Configuration="Release" /p:Platform=%(platform)s /m
 %%MSBUILD%% %%LCMS%%\Projects\VC%(vc_version)s\lcms2.sln /t:lcms2_static /p:Configuration="Release" /p:Platform=%(platform)s /m
