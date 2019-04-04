@@ -220,9 +220,9 @@ endlocal
 """ % compiler  # noqa: E501
 
 
-def build_lcms2(compiler):
+def build_lcms2(compiler, bit):
     if compiler['env_version'] == 'v7.1':
-        return build_lcms_71(compiler)
+        return build_lcms_71(compiler, bit)
     return build_lcms_70(compiler)
 
 
@@ -245,10 +245,11 @@ endlocal
 """ % compiler  # noqa: E501
 
 
-def build_lcms_71(compiler):
+def build_lcms_71(compiler, bit):
     x = r"""
 rem Build lcms2
 setlocal
+""" + vc_setup(compiler, bit) + r"""
 echo "lcms71 a"
 dir "C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0"
 echo "torchwood"
@@ -295,7 +296,7 @@ endlocal
 def add_compiler(compiler, bit):
     script.append(setup_compiler(compiler))
     script.append(nmake_libs(compiler, bit))
-    script.append(build_lcms2(compiler))
+    script.append(build_lcms2(compiler, bit))
     script.append(end_compiler())
 
 
