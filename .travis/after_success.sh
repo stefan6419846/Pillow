@@ -9,6 +9,11 @@ sudo apt-get -qq install lcov
 echo "torch"
 lcov --version
 echo "torch2"
+wget http://mirrors.edge.kernel.org/ubuntu//pool/universe/l/lcov/lcov_1.13-4_all.deb
+sudo dpkg -i lcov_1.13-4_all.deb
+echo "torch3"
+lcov --version
+echo "torch4"
 lcov --capture --directory . -b . --output-file coverage.info
 #  filter to remove system headers
 lcov --remove coverage.info '/usr/*' -o coverage.filtered.info
