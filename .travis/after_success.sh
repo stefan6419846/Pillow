@@ -6,6 +6,12 @@ if [ "$DOCKER" ]; then
     pip install coverage
 fi
 sudo apt-get -qq install lcov
+echo "torch g1"
+gcov --version
+echo "torch g2"
+sudo apt-get -qq install gcov
+echo "torch g3"
+gcov --version
 echo "torch"
 lcov --version
 echo "torch2"
