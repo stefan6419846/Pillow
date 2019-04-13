@@ -6,12 +6,6 @@ if [ "$DOCKER" ]; then
     pip install coverage
 fi
 sudo apt-get -qq install lcov
-echo "torch g1"
-gcov --version
-echo "torch g2"
-sudo apt-get -qq install gcov
-echo "torch g3"
-gcov --version
 echo "torch"
 lcov --version
 echo "torch2"
@@ -20,9 +14,17 @@ sudo dpkg -i lcov_1.13-4_all.deb
 echo "torch3"
 lcov --version
 echo "torch4"
-lcov --capture --directory . -b . --output-file coverage.info --gcov-tool /usr/bin/gcov-8.3
-echo "torch5"
-find / -iname *gcov*
+lcov --capture --directory . -b . --output-file coverage.info --gcov-tool /usr/bin/gcov-tool-5
+echo "torch4a"
+lcov --capture --directory . -b . --output-file coverage.info --gcov-tool /usr/bin/i686-w64-mingw32-gcov-tool-posix
+echo "torch4b"
+lcov --capture --directory . -b . --output-file coverage.info --gcov-tool /usr/bin/x86_64-w64-mingw32-gcov-tool-posix
+echo "torch4c"
+lcov --capture --directory . -b . --output-file coverage.info --gcov-tool /usr/bin/x86_64-linux-gnu-gcov-tool-5
+echo "torch4d"
+lcov --capture --directory . -b . --output-file coverage.info --gcov-tool /usr/bin/gcov-tool
+echo "torch4e"
+lcov --capture --directory . -b . --output-file coverage.info --gcov-tool /usr/bin/x86_64-linux-gnu-gcov-tool
 echo "torch7"
 #  filter to remove system headers
 lcov --remove coverage.info '/usr/*' -o coverage.filtered.info
