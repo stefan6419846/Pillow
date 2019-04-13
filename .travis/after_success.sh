@@ -1,6 +1,9 @@
 #!/bin/bash
 
 # gather the coverage data
+if [ "$DOCKER" ]; then
+    sudo apt-get update
+fi
 sudo apt-get -qq install lcov
 lcov --capture --directory . -b . --output-file coverage.info
 #  filter to remove system headers
