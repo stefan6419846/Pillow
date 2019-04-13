@@ -20,7 +20,10 @@ sudo dpkg -i lcov_1.13-4_all.deb
 echo "torch3"
 lcov --version
 echo "torch4"
-lcov --capture --directory . -b . --output-file coverage.info
+lcov --capture --directory . -b . --output-file coverage.info --gcov-tool /usr/bin/gcov-8.3
+echo "torch5"
+find / -iname *gcov*
+echo "torch7"
 #  filter to remove system headers
 lcov --remove coverage.info '/usr/*' -o coverage.filtered.info
 #  convert to json
