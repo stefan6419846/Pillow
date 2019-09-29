@@ -611,6 +611,11 @@ class TestFileTiff(PillowTestCase):
         with Image.open(out) as im:
             im.load()
 
+    def test_string_dimension(self):
+        # Assert that an error is raised if one of the dimensions is a string
+        with self.assertRaises(ValueError):
+            Image.open("Tests/images/string_dimension.tiff")
+
 
 @unittest.skipUnless(sys.platform.startswith("win32"), "Windows only")
 class TestFileTiffW32(PillowTestCase):
