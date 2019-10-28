@@ -12,7 +12,9 @@ def fetch(url):
 
         try:
             r = urllib.request.urlopen("https://github.com/python-pillow/pillow-depends/raw/master/"+name)
+            print("torch pass")
         except urllib.error.URLError:
+            print("torch fail")
             try:
                 r = urllib.request.urlopen(url)
             except urllib.error.URLError:
