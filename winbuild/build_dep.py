@@ -43,26 +43,27 @@ def extract(src, dest):
         return untar(src, dest)
 
 
-def extract_libs():
-    for name, lib in libs.items():
-        filename = lib["filename"]
-        if not os.path.exists(filename):
-            filename = fetch(lib["url"])
-        if name == "openjpeg":
-            for compiler in all_compilers():
-                if not os.path.exists(
-                    os.path.join(build_dir, lib["dir"] + compiler["inc_dir"])
-                ):
-                    extract(filename, build_dir)
-                    os.rename(
-                        os.path.join(build_dir, lib["dir"]),
-                        os.path.join(build_dir, lib["dir"] + compiler["inc_dir"]),
-                    )
-        else:
-            extract(filename, build_dir)
+def extract_lib(name):
+    lib = libs[name]
+    filename = lib["filename"]
+    if not os.path.exists(filename):
+        filename = fetch(lib["url"])
+    if name == "openjpeg":
+        for compiler in all_compilers():
+            if not os.path.exists(
+                os.path.join(build_dir, lib["dir"] + compiler["inc_dir"])
+            ):
+                extract(filename, build_dir)
+                os.rename(
+                    os.path.join(build_dir, lib["dir"]),
+                    os.path.join(build_dir, lib["dir"] + compiler["inc_dir"]),
+                )
+    else:
+        extract(filename, build_dir)
 
 
 def extract_openjpeg(compiler):
+    extract_lib("openjpeg")
     return (
         r"""
 rem build openjpeg
@@ -79,6 +80,9 @@ endlocal
 
 
 def cp_tk(ver_85, ver_86):
+    for name in ["tk-8.5", "tk-8.6"]:
+        extract_lib(name)
+
     versions = {"ver_85": ver_85, "ver_86": ver_86}
     return (
         r"""
@@ -130,6 +134,8 @@ def nmake_openjpeg(compiler, bit):
     if compiler["env_version"] == "v7.0":
         return ""
 
+    extract_lib("openjpeg")
+
     atts = {"op_ver": "2.3.1"}
     atts.update(compiler)
     return (
@@ -154,6 +160,9 @@ endlocal
 
 
 def nmake_libs(compiler, bit):
+    for name in ["jpeg", "zlib", "webp", "tiff"]:
+        extract_lib(name)
+
     # undone -- pre, makes, headers, libs
     script = (
         r"""
@@ -217,6 +226,8 @@ endlocal
 
 
 def msbuild_freetype(compiler, bit):
+    extract_lib("freetype")
+
     script = r"""
 rem Build freetype
 setlocal
@@ -261,11 +272,13 @@ def build_lcms2(compiler):
 
 
 def build_lcms_70(compiler):
-    """Link error here on x64"""
+    """Build LCMS on VC2008. This version is only 32bit/Win32"""
+
     if compiler["platform"] == "x64":
+        # Link error on x64
         return ""
 
-    """Build LCMS on VC2008. This version is only 32bit/Win32"""
+    extract_lib("lcms-2.7")
     return (
         r"""
 rem Build lcms2
@@ -284,6 +297,7 @@ endlocal
 
 
 def build_lcms_71(compiler):
+    extract_lib("lcms-2.8")
     return (
         r"""
 rem Build lcms2
@@ -303,6 +317,7 @@ endlocal
 
 
 def build_ghostscript(compiler, bit):
+    extract_lib("ghostscript")
     script = (
         r"""
 rem Build gs
@@ -343,7 +358,6 @@ def add_compiler(compiler, bit):
 
 
 mkdirs()
-extract_libs()
 script = [header(), cp_tk(libs["tk-8.5"]["version"], libs["tk-8.6"]["version"])]
 
 
