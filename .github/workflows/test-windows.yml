@@ -68,12 +68,7 @@ jobs:
         Write-Host "::add-path::$env:RUNNER_WORKSPACE\nasm-2.14.02"
 
         $env:PYTHON=$env:pythonLocation
-        curl -fsSL -o pillow-depends.zip https://github.com/python-pillow/pillow-depends/archive/master.zip
-        7z x pillow-depends.zip -oc:\
-        mv c:\pillow-depends-master c:\pillow-depends
-        xcopy c:\pillow-depends\*.zip $env:GITHUB_WORKSPACE\winbuild\
-        xcopy c:\pillow-depends\*.tar.gz $env:GITHUB_WORKSPACE\winbuild\
-        xcopy /s c:\pillow-depends\test_images\* $env:GITHUB_WORKSPACE\tests\images\
+        svn export --force https://github.com/python-pillow/pillow-depends/trunk/test_images $env:GITHUB_WORKSPACE\tests\images\
         cd $env:GITHUB_WORKSPACE/winbuild/
         python.exe $env:GITHUB_WORKSPACE\winbuild\build_dep.py
       env:

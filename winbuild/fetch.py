@@ -9,10 +9,14 @@ def fetch(url):
 
     if not os.path.exists(name):
         print("Fetching", url)
+
         try:
-            r = urllib.request.urlopen(url)
+            r = urllib.request.urlopen("https://github.com/python-pillow/pillow-depends/raw/master/"+name)
         except urllib.error.URLError:
-            r = urllib.request.urlopen(url)
+            try:
+                r = urllib.request.urlopen(url)
+            except urllib.error.URLError:
+                r = urllib.request.urlopen(url)
         content = r.read()
         with open(name, "wb") as fd:
             fd.write(content)

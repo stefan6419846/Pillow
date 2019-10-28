@@ -37,12 +37,7 @@ install:
         curl -o install_python.ps1 https://raw.githubusercontent.com/matthew-brett/multibuild/d0cf77e62028704875073e3dc4626f61d1c33b0e/install_python.ps1
         .\install_python.ps1
       }
-- curl -fsSL -o pillow-depends.zip https://github.com/python-pillow/pillow-depends/archive/master.zip
-- 7z x pillow-depends.zip -oc:\
-- mv c:\pillow-depends-master c:\pillow-depends
-- xcopy c:\pillow-depends\*.zip c:\pillow\winbuild\
-- xcopy c:\pillow-depends\*.tar.gz c:\pillow\winbuild\
-- xcopy /s c:\pillow-depends\test_images\* c:\pillow\tests\images
+- svn export --force https://github.com/python-pillow/pillow-depends/trunk/test_images c:\pillow\tests\images
 - cd c:\pillow\winbuild\
 - ps: |
       if ($env:PYTHON -eq "c:/vp/pypy2")
