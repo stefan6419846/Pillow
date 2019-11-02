@@ -90,12 +90,12 @@ jobs:
         REM torch
         dir "C:\Program Files (x86)\Microsoft SDKs\Windows"
         REM torchend
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.0A\Include
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V10.0A\Include
         set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         set BUILD=%GITHUB_WORKSPACE%\winbuild\build
         set CMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY
         cd /D %BUILD%\libjpeg-turbo-2.0.3
-        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.platform-vcvars }} 8.1
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.platform-vcvars }} 10.0
         set CMAKE=cmake.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_RULE_MESSAGES:BOOL=OFF
         set CMAKE=%CMAKE% -DENABLE_SHARED:BOOL=OFF -DWITH_JPEG8:BOOL=TRUE -DWITH_CRT_DLL:BOOL=TRUE -DCMAKE_BUILD_TYPE=Release
         %CMAKE% -G "NMake Makefiles" .
