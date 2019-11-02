@@ -90,7 +90,7 @@ jobs:
         REM torch
         dir "C:\Program Files (x86)\Microsoft SDKs\Windows"
         REM torchend
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V10.0A\Include
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.0A\Include
         set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         set BUILD=%GITHUB_WORKSPACE%\winbuild\build
         set CMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY
