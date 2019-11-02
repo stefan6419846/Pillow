@@ -45,12 +45,6 @@ jobs:
         python-version: ${{ matrix.python-version }}
         architecture: ${{ matrix.architecture }}
 
-    - name: pip install wheel pytest pytest-cov codecov
-      run: |
-        "%pythonLocation%\python.exe" -m pip install wheel pytest pytest-cov
-        pip install codecov
-      shell: cmd
-
     - name: Fetch dependencies
       run: |
         curl -fsSL -o nasm.zip https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/win64/nasm-2.14.02-win64.zip
