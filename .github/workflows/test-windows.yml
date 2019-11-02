@@ -70,8 +70,8 @@ jobs:
       run: |
         REM FIXME uses /MT not /MD, see makefile.vc and win32.mak for more info
 
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.1A\Include
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V8.1\Include
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         set BUILD=%GITHUB_WORKSPACE%\winbuild\build
         cd /D %BUILD%\jpeg-9c
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.platform-vcvars }} 8.1
@@ -84,10 +84,29 @@ jobs:
         copy /Y /B *.exe %INCLIB%
       shell: cmd
 
-    - name: Build dependencies / zlib
+    - name: Build dependencies / libjpeg-turbo
       run: |
         set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.1A\Include
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
+        set BUILD=%GITHUB_WORKSPACE%\winbuild\build
+        cd /D %BUILD%\libjpeg-turbo-2.0.3
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.platform-vcvars }} 8.1
+        echo on
+        set CMAKE=cmake.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_RULE_MESSAGES:BOOL=OFF
+        set CMAKE=%CMAKE% -DENABLE_SHARED:BOOL=OFF -DWITH_JPEG8:BOOL=TRUE -DWITH_CRT_DLL:BOOL=TRUE -DCMAKE_BUILD_TYPE=Release
+        %CMAKE% -G "NMake Makefiles" .
+        nmake -nologo -f Makefile clean
+        nmake -nologo -f Makefile jpeg-static cjpeg-static djpeg-static
+        copy /Y /B j*.h %INCLIB%
+        copy /Y /B jpeg-static.lib %INCLIB%\libjpeg.lib
+        copy /Y /B cjpeg-static.exe %INCLIB%\cjpeg.exe
+        copy /Y /B djpeg-static.exe %INCLIB%\djpeg.exe
+      shell: cmd
+
+    - name: Build dependencies / zlib
+      run: |
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V8.1\Include
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         set BUILD=%GITHUB_WORKSPACE%\winbuild\build
         cd /D %BUILD%\zlib-1.2.11
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.platform-vcvars }} 8.1
@@ -101,15 +120,12 @@ jobs:
 
     - name: Build dependencies / LibTIFF
       run: |
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.1A\Include
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V8.1\Include
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         set BUILD=%GITHUB_WORKSPACE%\winbuild\build
         cd /D %BUILD%\tiff-4.0.10
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.platform-vcvars }} 8.1
         echo on
-        REM torch
-        dir "%GITHUB_WORKSPACE%\winbuild\depends"
-        REM torch2
         copy %GITHUB_WORKSPACE%\winbuild\tiff.opt nmake.opt
         nmake -nologo -f makefile.vc clean
         nmake -nologo -f makefile.vc lib
@@ -120,8 +136,8 @@ jobs:
 
     - name: Build dependencies / WebP
       run: |
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.1A\Include
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V8.1\Include
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         set BUILD=%GITHUB_WORKSPACE%\winbuild\build
         cd /D %BUILD%\libwebp-1.0.3
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.platform-vcvars }} 8.1
@@ -137,8 +153,8 @@ jobs:
       run: |
         REM Toolkit v100 not available; missing VCTargetsPath; Clean fails
 
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.1A\Include
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V8.1\Include
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         set BUILD=%GITHUB_WORKSPACE%\winbuild\build
         cd /D %BUILD%\freetype-2.10.1
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.platform-vcvars }} 8.1
@@ -155,8 +171,8 @@ jobs:
 
     - name: Build dependencies / LCMS2
       run: |
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.1A\Include
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V8.1\Include
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         set BUILD=%GITHUB_WORKSPACE%\winbuild\build
         cd /D %BUILD%\lcms2-2.8
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.platform-vcvars }} 8.1
@@ -173,10 +189,10 @@ jobs:
 
     - name: Build dependencies / OpenJPEG
       run: |
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.1A\Include
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V8.1\Include
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         set BUILD=%GITHUB_WORKSPACE%\winbuild\build
-        cd /D %BUILD%\openjpeg-2.3.1msvcr10-x32
+        cd /D %BUILD%\openjpeg-2.3.1msvcr90-x32
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.platform-vcvars }} 8.1
         echo on
         set CMAKE=cmake.exe -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_RULE_MESSAGES:BOOL=OFF
@@ -194,8 +210,8 @@ jobs:
     - name: Build dependencies / libimagequant
       if: "github.event_name != 'push' || contains(matrix.python-version, 'pypy')"
       run: |
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.1A\Include
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V8.1\Include
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         set BUILD=%GITHUB_WORKSPACE%\winbuild\build
         rem ba653c8: Merge tag '2.12.5' into msvc
         cd /D %BUILD%\libimagequant-ba653c8ccb34dde4e21c6076d85a72d21ed9d971
@@ -217,8 +233,8 @@ jobs:
     - name: Build dependencies / HarfBuzz
       if: "!contains(matrix.python-version, 'pypy')"
       run: |
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.1A\Include
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V8.1\Include
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         set BUILD=%GITHUB_WORKSPACE%\winbuild\build
         set INCLUDE=%INCLUDE%;%INCLIB%
         set LIB=%LIB%;%INCLIB%
@@ -238,8 +254,8 @@ jobs:
     - name: Build dependencies / FriBidi
       if: "!contains(matrix.python-version, 'pypy')"
       run: |
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.1A\Include
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V8.1\Include
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         set BUILD=%GITHUB_WORKSPACE%\winbuild\build
         cd /D %BUILD%\fribidi-1.0.7
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.platform-vcvars }} 8.1
@@ -258,8 +274,8 @@ jobs:
     - name: Build dependencies / Raqm
       if: "!contains(matrix.python-version, 'pypy')"
       run: |
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.1A\Include
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V8.1\Include
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         set BUILD=%GITHUB_WORKSPACE%\winbuild\build
         set INCLUDE=%INCLUDE%;%INCLIB%
         set LIB=%LIB%;%INCLIB%
@@ -278,14 +294,14 @@ jobs:
 
     - name: Build dependencies / ghostscript
       run: |
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.1A\Include
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V8.1\Include
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         set BUILD=%GITHUB_WORKSPACE%\winbuild\build
         cd /D %BUILD%\ghostscript-9.27
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.platform-vcvars }} 8.1
         echo on
         set MSVC_VERSION=14
-        set RCOMP="C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin\RC.Exe"
+        set RCOMP="C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1\Bin\RC.Exe"
         if "${{ matrix.architecture }}"=="x64" set WIN64=""
         nmake -nologo -f psi\msvc.mak
         rem Add bin to PATH variable: Copy to INCLIB, then add INCLIB to PATH in Test step.
@@ -295,9 +311,9 @@ jobs:
     - name: Build Pillow
       run: |
         set PYTHON=%pythonLocation%
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.1A\Include
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V8.1\Include
         set MPLSRC=%GITHUB_WORKSPACE%
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         cd /D %GITHUB_WORKSPACE%
         set LIB=%INCLIB%;%PYTHON%\tcl
         set INCLUDE=%INCLIB%;%GITHUB_WORKSPACE%\depends\tcl86\include;%INCLUDE%
@@ -311,7 +327,7 @@ jobs:
     - name: Test Pillow
       run: |
         set PYTHON=%pythonLocation%
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         rem Add GhostScript and Raqm binaries (copied to INCLIB) to PATH.
         path %INCLIB%;%PATH%
         cd /D %GITHUB_WORKSPACE%
@@ -329,9 +345,9 @@ jobs:
         for /f "tokens=3 delims=/" %%a in ("${{ github.ref }}") do echo ##[set-output name=dist;]dist-%%a
         for /f "tokens=3 delims=/" %%a in ("${{ github.ref }}") do echo ::set-output name=dist::dist-%%a
         set PYTHON=%pythonLocation%
-        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V7.1A\Include
+        set INCLUDE=C:\Program Files (x86)\Microsoft SDKs\Windows\V8.1\Include
         set MPLSRC=%GITHUB_WORKSPACE%
-        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr10-x32
+        set INCLIB=%GITHUB_WORKSPACE%\winbuild\depends\msvcr90-x32
         cd /D %GITHUB_WORKSPACE%
         set LIB=%INCLIB%;%PYTHON%\tcl
         set INCLUDE=%INCLIB%;%GITHUB_WORKSPACE%\depends\tcl86\include;%INCLUDE%
