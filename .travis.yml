@@ -13,6 +13,34 @@ notifications:
 matrix:
   fast_finish: true
   include:
+    - python: "3.8"
+      arch: arm64
+    - python: "3.8"
+      arch: ppc64le
+    - python: "3.8"
+      arch: s390x
+
+    - python: "3.7"
+      arch: arm64
+    - python: "3.7"
+      arch: ppc64le
+    - python: "3.7"
+      arch: s390x
+
+    - python: "3.6"
+      arch: arm64
+    - python: "3.6"
+      arch: ppc64le
+    - python: "3.6"
+      arch: s390x
+
+    - python: "3.5"
+      arch: arm64
+    - python: "3.5"
+      arch: ppc64le
+    - python: "3.5"
+      arch: s390x
+
     - python: "3.6"
       name: "Lint"
       env: LINT="true"
@@ -59,8 +87,13 @@ install:
       .travis/install.sh;
     fi
 
+# AMD64 x86_64
+# Arm64 aarch64
+# ppc64le ppc64le
+# s390x s390x
 script:
 - |
+  python -c "import platform; print(platform.processor())"
   if [ "$LINT" == "true" ]; then
     tox -e lint
   elif [ "$DOCKER" == "" ]; then
