@@ -14,7 +14,6 @@ matrix:
   fast_finish: true
   include:
     - python: "3.8"
-      arch: arm64
     - python: "3.8"
       arch: s390x
 

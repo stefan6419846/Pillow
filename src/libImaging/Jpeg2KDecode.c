@@ -143,12 +143,16 @@ static void
 j2ku_gray_i(opj_image_t *in, const JPEG2KTILEINFO *tileinfo,
             const UINT8 *tiledata, Imaging im)
 {
+    printf("inside\n");
     unsigned x0 = tileinfo->x0 - in->x0, y0 = tileinfo->y0 - in->y0;
     unsigned w = tileinfo->x1 - tileinfo->x0;
     unsigned h = tileinfo->y1 - tileinfo->y0;
 
     int shift = 16 - in->comps[0].prec;
+    printf("in->comps[0].sgnd %d\n", in->comps[0].sgnd ? 1 : 2);
+    printf("in->comps[0].prec %d\n", in->comps[0].prec);
     int offset = in->comps[0].sgnd ? 1 << (in->comps[0].prec - 1) : 0;
+    printf("offset %d\n", offset);
     int csiz = (in->comps[0].prec + 7) >> 3;
 
     unsigned x, y;
@@ -159,6 +163,8 @@ j2ku_gray_i(opj_image_t *in, const JPEG2KTILEINFO *tileinfo,
     if (shift < 0)
         offset += 1 << (-shift - 1);
 
+    printf("offset2 %d\n", offset);
+    printf("csiz %d\n", csiz);
     switch (csiz) {
     case 1:
         for (y = 0; y < h; ++y) {
@@ -171,7 +177,9 @@ j2ku_gray_i(opj_image_t *in, const JPEG2KTILEINFO *tileinfo,
     case 2:
         for (y = 0; y < h; ++y) {
             const UINT16 *data = (const UINT16 *)&tiledata[2 * y * w];
+            printf("data %u\n", (unsigned int)data);
             UINT16 *row = (UINT16 *)im->image[y0 + y] + x0;
+            printf("row %u\n", (unsigned int)row);
             for (x = 0; x < w; ++x)
                 *row++ = j2ku_shift(offset + *data++, shift);
         }
@@ -550,6 +558,7 @@ enum {
 static int
 j2k_decode_entry(Imaging im, ImagingCodecState state)
 {
+    printf("decode entry\n");
     JPEG2KDECODESTATE *context = (JPEG2KDECODESTATE *) state->context;
     opj_stream_t *stream = NULL;
     opj_image_t *image = NULL;
@@ -658,10 +667,14 @@ j2k_decode_entry(Imaging im, ImagingCodecState state)
         }
     }
 
+    printf("start search\n");
     for (n = 0; n < sizeof(j2k_unpackers) / sizeof (j2k_unpackers[0]); ++n) {
         if (color_space == j2k_unpackers[n].color_space
             && image->numcomps == j2k_unpackers[n].components
             && strcmp (im->mode, j2k_unpackers[n].mode) == 0) {
+            printf("colorspace %d\n", color_space);
+            printf("components %d\n", image->numcomps);
+            printf("mode %s\n", im->mode);
             unpack = j2k_unpackers[n].unpacker;
             break;
         }
