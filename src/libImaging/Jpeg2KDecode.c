@@ -176,7 +176,8 @@ j2ku_gray_i(opj_image_t *in, const JPEG2KTILEINFO *tileinfo,
         break;
     case 2:
         for (y = 0; y < h; ++y) {
-            const UINT16 *data = (const UINT16 *)&tiledata[2 * y * w];
+            const UINT8 *data_uint8 = &tiledata[2 * y * w];
+            const UINT16 *data = data_uint8[0] + (data_uint8[1] << 8);
             printf("data %u\n", (unsigned int)data);
             UINT16 *row = (UINT16 *)im->image[y0 + y] + x0;
             printf("row %u\n", (unsigned int)row);
