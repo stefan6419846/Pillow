@@ -1561,10 +1561,6 @@ def _save(im, fp, filename):
             if tag not in TiffTags.LIBTIFF_CORE:
                 if TiffTags.lookup(tag).type == TiffTags.UNDEFINED:
                     continue
-                if distutils.version.StrictVersion(
-                    _libtiff_version()
-                ) < distutils.version.StrictVersion("4.0"):
-                    continue
 
                 if tag in ifd.tagtype:
                     types[tag] = ifd.tagtype[tag]
