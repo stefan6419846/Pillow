@@ -52,6 +52,7 @@ jobs:
         pip install wheel
         sudo apt-get install -qq ruby-dev
         PATH="$PATH:~/.local/bin"
+        cp .github/codecov-upstream.yml .codecov.yml
         .travis/after_success.sh
 
     - name: Prepare coverage token
