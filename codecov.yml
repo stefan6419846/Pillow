@@ -5,8 +5,8 @@ codecov:
   # https://github.com/codecov/support/issues/363
   # https://docs.codecov.io/docs/comparing-commits
   allow_coverage_offsets: true
-
-comment: false
+  
+  comment: false
 
 # Matches 'omit:' in .coveragerc
 ignore:
