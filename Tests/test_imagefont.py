@@ -106,7 +106,7 @@ class TestImageFont(PillowTestCase):
         image_color = (128,128,128)
         # Create an image with background color inverse to the text color.
         image = Image.new('RGB', (640, 480), color=image_color)
-        text = "illow"
+        text = "pillow"
         text_color_tuple = 255,0,0
         outline_color_tuple = 0,0,0
         font = ImageFont.truetype(font_path, size=48)
