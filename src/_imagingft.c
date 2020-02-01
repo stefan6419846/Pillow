@@ -803,9 +803,7 @@ font_render(FontObject* self, PyObject* args)
             ascender = temp;
     }
 
-    if (stroker == NULL) {
-        load_flags |= FT_LOAD_RENDER;
-    }
+    load_flags |= FT_LOAD_RENDER;
 
     x = y = 0;
     horizontal_dir = dir && strcmp(dir, "ttb") == 0 ? 0 : 1;
