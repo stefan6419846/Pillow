@@ -538,8 +538,7 @@ static PyTypeObject WebPAnimDecoder_Type = {
 /* Legacy WebP Support                                                  */
 /* -------------------------------------------------------------------- */
 
-static PyObject*
-WebPEncode_wrapper(PyObject* self, PyObject* args)
+PyObject* WebPEncode_wrapper(PyObject* self, PyObject* args)
 {
     int width;
     int height;

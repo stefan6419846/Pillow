@@ -762,10 +762,17 @@ class pil_build_ext(build_ext):
                 defs.append(("HAVE_WEBPMUX", None))
                 libs.append(feature.webpmux)
                 libs.append(feature.webpmux.replace("pmux", "pdemux"))
+            if sys.platform == "win32" and not (PLATFORM_PYPY or PLATFORM_MINGW):
+                defs.append(("PILLOW_VERSION", '"\\"%s\\""' % PILLOW_VERSION))
+            else:
+                defs.append(("PILLOW_VERSION", '"%s"' % PILLOW_VERSION))
 
             exts.append(
                 Extension(
-                    "PIL._webp", ["src/_webp.c"], libraries=libs, define_macros=defs
+                    "PIL._webp",
+                    ["src/_webp.c", "src/_imaging.c"],
+                    libraries=libs,
+                    define_macros=defs,
                 )
             )
 
