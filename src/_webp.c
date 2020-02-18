@@ -21,16 +21,6 @@
 
 #endif
 
-void ImagingSectionEnter(ImagingSectionCookie* cookie)
-{
-    *cookie = (PyThreadState *) PyEval_SaveThread();
-}
-
-void ImagingSectionLeave(ImagingSectionCookie* cookie)
-{
-    PyEval_RestoreThread((PyThreadState*) *cookie);
-}
-
 /* -------------------------------------------------------------------- */
 /* WebP Muxer Error Handling                                            */
 /* -------------------------------------------------------------------- */
