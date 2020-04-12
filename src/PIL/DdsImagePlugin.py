@@ -127,10 +127,9 @@ class DdsImageFile(ImageFile.ImageFile):
         if pfflags & 0x40:
             # DDPF_RGB - Texture contains uncompressed RGB data
             masks = {mask: ["R", "G", "B", "A"][i] for i, mask in enumerate(masks)}
-            rawmode = ""
+            rawmode = masks[0xFF] + masks[0xFF00] + masks[0xFF0000]
             if bitcount == 32:
                 rawmode += masks[0xFF000000]
-            rawmode += masks[0xFF0000] + masks[0xFF00] + masks[0xFF]
 
             self.tile = [("raw", (0, 0) + self.size, 0, (rawmode, 0, 1))]
         else:
