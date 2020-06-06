@@ -19,17 +19,16 @@ set -e
 
 sudo apt-get -qq install libfreetype6-dev liblcms2-dev python3-tk\
                          ghostscript libffi-dev libjpeg-turbo-progs libopenjp2-7-dev\
-                         cmake imagemagick libharfbuzz-dev libfribidi-dev
+                         cmake imagemagick
 
 pip install --upgrade pip
 PYTHONOPTIMIZE=0 pip install cffi
 pip install coverage
-pip install olefile
 pip install -U pytest
 pip install -U pytest-cov
 pip install pyroma
-pip install test-image-results
 pip install numpy
+pip install h5py
 if [[ $TRAVIS_PYTHON_VERSION == 3.* ]]; then
   # arm64, ppc64le, s390x CPUs:
   # "ERROR: Could not find a version that satisfies the requirement pyqt5"
