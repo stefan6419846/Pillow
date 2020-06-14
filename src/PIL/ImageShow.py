@@ -169,6 +169,14 @@ else:
 
     # implementations
 
+    class XdgOpenViewer(UnixViewer):
+        def get_command_ex(self, file, **options):
+            command = executable = "xdg-open"
+            return command, executable
+
+    if shutil.which("xdg-open"):
+        register(XdgOpenViewer)
+
     class DisplayViewer(UnixViewer):
         def get_command_ex(self, file, **options):
             command = executable = "display"
