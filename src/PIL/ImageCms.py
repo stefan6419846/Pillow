@@ -318,9 +318,9 @@ def profileToProfile(
     :param outputProfile: String, as a valid filename path to the ICC output
         profile you wish to use for this image, or a profile object
     :param renderingIntent: Integer (0-3) specifying the rendering intent you
-        wish to use for the transform
+        wish to use for the transform::
 
-            ImageCms.INTENT_PERCEPTUAL            = 0 (DEFAULT)
+            ImageCms.INTENT_PERCEPTUAL            = 0  # default
             ImageCms.INTENT_RELATIVE_COLORIMETRIC = 1
             ImageCms.INTENT_SATURATION            = 2
             ImageCms.INTENT_ABSOLUTE_COLORIMETRIC = 3
@@ -386,7 +386,7 @@ def getOpenProfile(profileFilename):
 
     :param profileFilename: String, as a valid filename path to the ICC profile
         you wish to open, or a file-like object.
-    :returns: A CmsProfile class object.
+    :returns: A :py:class:`~PIL.ImageCms.CmsProfile` class object.
     :exception PyCMSError:
     """
 
@@ -445,9 +445,9 @@ def buildTransform(
     :param outMode: String, as a valid PIL mode that the appropriate profile
         also supports (i.e. "RGB", "RGBA", "CMYK", etc.)
     :param renderingIntent: Integer (0-3) specifying the rendering intent you
-        wish to use for the transform
+        wish to use for the transform::
 
-            ImageCms.INTENT_PERCEPTUAL            = 0 (DEFAULT)
+            ImageCms.INTENT_PERCEPTUAL            = 0  # default
             ImageCms.INTENT_RELATIVE_COLORIMETRIC = 1
             ImageCms.INTENT_SATURATION            = 2
             ImageCms.INTENT_ABSOLUTE_COLORIMETRIC = 3
@@ -537,9 +537,9 @@ def buildProofTransform(
     :param outMode: String, as a valid PIL mode that the appropriate profile
         also supports (i.e. "RGB", "RGBA", "CMYK", etc.)
     :param renderingIntent: Integer (0-3) specifying the rendering intent you
-        wish to use for the input->proof (simulated) transform
+        wish to use for the input->proof (simulated) transform::
 
-            ImageCms.INTENT_PERCEPTUAL            = 0 (DEFAULT)
+            ImageCms.INTENT_PERCEPTUAL            = 0  # default
             ImageCms.INTENT_RELATIVE_COLORIMETRIC = 1
             ImageCms.INTENT_SATURATION            = 2
             ImageCms.INTENT_ABSOLUTE_COLORIMETRIC = 3
@@ -547,9 +547,9 @@ def buildProofTransform(
         see the pyCMS documentation for details on rendering intents and what
         they do.
     :param proofRenderingIntent: Integer (0-3) specifying the rendering intent
-        you wish to use for proof->output transform
+        you wish to use for proof->output transform::
 
-            ImageCms.INTENT_PERCEPTUAL            = 0 (DEFAULT)
+            ImageCms.INTENT_PERCEPTUAL            = 0  # default
             ImageCms.INTENT_RELATIVE_COLORIMETRIC = 1
             ImageCms.INTENT_SATURATION            = 2
             ImageCms.INTENT_ABSOLUTE_COLORIMETRIC = 3
@@ -613,7 +613,7 @@ def applyTransform(im, transform, inPlace=False):
     to an image. The transform can be used for multiple images, saving
     considerable calculation time if doing the same conversion multiple times.
 
-    If you want to modify im in-place instead of receiving a new image as
+    If you want to modify ``im`` in-place instead of receiving a new image as
     the return value, set ``inPlace`` to ``True``.  This can only be done if
     ``transform.inMode`` and ``transform.outMode`` are the same, because we can't
     change the mode in-place (the buffer sizes for some modes are
@@ -658,9 +658,9 @@ def createProfile(colorSpace, colorTemp=-1):
 
     Use this function to create common profiles on-the-fly instead of
     having to supply a profile on disk and knowing the path to it.  It
-    returns a normal CmsProfile object that can be passed to
-    ImageCms.buildTransformFromOpenProfiles() to create a transform to apply
-    to images.
+    returns a normal :py:class:`~PIL.ImageCms.CmsProfile` object that can be
+    passed to ImageCms.buildTransformFromOpenProfiles() to create a transform
+    to apply to images.
 
     :param colorSpace: String, the color space of the profile you wish to
         create.
@@ -669,7 +669,7 @@ def createProfile(colorSpace, colorTemp=-1):
         degrees Kelvin (i.e. 5000, 6500, 9600, etc.).  The default is for D50
         illuminant if omitted (5000k).  colorTemp is ONLY applied to LAB
         profiles, and is ignored for XYZ and sRGB.
-    :returns: A CmsProfile class object
+    :returns: A :py:class:`~PIL.ImageCms.CmsProfile` class object
     :exception PyCMSError:
     """
 
@@ -698,17 +698,17 @@ def getProfileName(profile):
 
     (pyCMS) Gets the internal product name for the given profile.
 
-    If ``profile`` isn't a valid CmsProfile object or filename to a profile,
-    a ``PyCMSError`` is raised If an error occurs while trying to obtain the
-    name tag, a ``PyCMSError`` is raised.
+    If ``profile`` isn't a valid :py:class:`~PIL.ImageCms.CmsProfile` object or
+    filename to a profile, a ``PyCMSError`` is raised If an error occurs while
+    trying to obtain the name tag, a ``PyCMSError`` is raised.
 
     Use this function to obtain the INTERNAL name of the profile (stored
     in an ICC tag in the profile itself), usually the one used when the
     profile was originally created.  Sometimes this tag also contains
     additional information supplied by the creator.
 
-    :param profile: EITHER a valid CmsProfile object, OR a string of the
-        filename of an ICC profile.
+    :param profile: EITHER a valid :py:class:`~PIL.ImageCms.CmsProfile` object,
+        OR a string of the filename of an ICC profile.
     :returns: A string containing the internal name of the profile as stored
         in an ICC tag.
     :exception PyCMSError:
@@ -739,8 +739,8 @@ def getProfileInfo(profile):
     """
     (pyCMS) Gets the internal product information for the given profile.
 
-    If ``profile`` isn't a valid CmsProfile object or filename to a profile,
-    a ``PyCMSError`` is raised.
+    If ``profile`` isn't a valid :py:class:`~PIL.ImageCms.CmsProfile` object or
+    filename to a profile, a ``PyCMSError`` is raised.
 
     If an error occurs while trying to obtain the info tag, a ``PyCMSError``
     is raised.
@@ -749,8 +749,8 @@ def getProfileInfo(profile):
     info tag.  This often contains details about the profile, and how it
     was created, as supplied by the creator.
 
-    :param profile: EITHER a valid CmsProfile object, OR a string of the
-        filename of an ICC profile.
+    :param profile: EITHER a valid :py:class:`~PIL.ImageCms.CmsProfile` object,
+        OR a string of the filename of an ICC profile.
     :returns: A string containing the internal profile information stored in
         an ICC tag.
     :exception PyCMSError:
@@ -779,8 +779,8 @@ def getProfileCopyright(profile):
     """
     (pyCMS) Gets the copyright for the given profile.
 
-    If ``profile`` isn't a valid CmsProfile object or filename to a profile, a
-    ``PyCMSError`` is raised.
+    If ``profile`` isn't a valid :py:class:`~PIL.ImageCms.CmsProfile` object or
+    filename to a profile, a ``PyCMSError`` is raised.
 
     If an error occurs while trying to obtain the copyright tag, a ``PyCMSError``
     is raised.
@@ -788,8 +788,8 @@ def getProfileCopyright(profile):
     Use this function to obtain the information stored in the profile's
     copyright tag.
 
-    :param profile: EITHER a valid CmsProfile object, OR a string of the
-        filename of an ICC profile.
+    :param profile: EITHER a valid :py:class:`~PIL.ImageCms.CmsProfile` object,
+        OR a string of the filename of an ICC profile.
     :returns: A string containing the internal profile information stored in
         an ICC tag.
     :exception PyCMSError:
@@ -807,8 +807,8 @@ def getProfileManufacturer(profile):
     """
     (pyCMS) Gets the manufacturer for the given profile.
 
-    If ``profile`` isn't a valid CmsProfile object or filename to a profile, a
-    ``PyCMSError`` is raised.
+    If ``profile`` isn't a valid :py:class:`~PIL.ImageCms.CmsProfile` object or
+    filename to a profile, a ``PyCMSError`` is raised.
 
     If an error occurs while trying to obtain the manufacturer tag, a
     ``PyCMSError`` is raised.
@@ -816,8 +816,8 @@ def getProfileManufacturer(profile):
     Use this function to obtain the information stored in the profile's
     manufacturer tag.
 
-    :param profile: EITHER a valid CmsProfile object, OR a string of the
-        filename of an ICC profile.
+    :param profile: EITHER a valid :py:class:`~PIL.ImageCms.CmsProfile` object,
+        OR a string of the filename of an ICC profile.
     :returns: A string containing the internal profile information stored in
         an ICC tag.
     :exception PyCMSError:
@@ -835,8 +835,8 @@ def getProfileModel(profile):
     """
     (pyCMS) Gets the model for the given profile.
 
-    If ``profile`` isn't a valid CmsProfile object or filename to a profile, a
-    ``PyCMSError`` is raised.
+    If ``profile`` isn't a valid :py:class:`~PIL.ImageCms.CmsProfile` object or
+    filename to a profile, a ``PyCMSError`` is raised.
 
     If an error occurs while trying to obtain the model tag, a ``PyCMSError``
     is raised.
@@ -844,8 +844,8 @@ def getProfileModel(profile):
     Use this function to obtain the information stored in the profile's
     model tag.
 
-    :param profile: EITHER a valid CmsProfile object, OR a string of the
-        filename of an ICC profile.
+    :param profile: EITHER a valid :py:class:`~PIL.ImageCms.CmsProfile` object,
+        OR a string of the filename of an ICC profile.
     :returns: A string containing the internal profile information stored in
         an ICC tag.
     :exception PyCMSError:
@@ -864,8 +864,8 @@ def getProfileDescription(profile):
     """
     (pyCMS) Gets the description for the given profile.
 
-    If ``profile`` isn't a valid CmsProfile object or filename to a profile, a
-    ``PyCMSError`` is raised.
+    If ``profile`` isn't a valid :py:class:`~PIL.ImageCms.CmsProfile` object or
+    filename to a profile, a ``PyCMSError`` is raised.
 
     If an error occurs while trying to obtain the description tag, a ``PyCMSError``
     is raised.
@@ -873,8 +873,8 @@ def getProfileDescription(profile):
     Use this function to obtain the information stored in the profile's
     description tag.
 
-    :param profile: EITHER a valid CmsProfile object, OR a string of the
-        filename of an ICC profile.
+    :param profile: EITHER a valid :py:class:`~PIL.ImageCms.CmsProfile` object,
+        OR a string of the filename of an ICC profile.
     :returns: A string containing the internal profile information stored in an
         ICC tag.
     :exception PyCMSError:
@@ -893,8 +893,8 @@ def getDefaultIntent(profile):
     """
     (pyCMS) Gets the default intent name for the given profile.
 
-    If ``profile`` isn't a valid CmsProfile object or filename to a profile, a
-    ``PyCMSError`` is raised.
+    If ``profile`` isn't a valid :py:class:`~PIL.ImageCms.CmsProfile` object or
+    filename to a profile, a ``PyCMSError`` is raised.
 
     If an error occurs while trying to obtain the default intent, a
     ``PyCMSError`` is raised.
@@ -905,12 +905,12 @@ def getDefaultIntent(profile):
     If you wish to use a different intent than returned, use
     ImageCms.isIntentSupported() to verify it will work first.
 
-    :param profile: EITHER a valid CmsProfile object, OR a string of the
-        filename of an ICC profile.
+    :param profile: EITHER a valid :py:class:`~PIL.ImageCms.CmsProfile` object,
+        OR a string of the filename of an ICC profile.
     :returns: Integer 0-3 specifying the default rendering intent for this
-        profile.
+        profile::
 
-            ImageCms.INTENT_PERCEPTUAL            = 0 (DEFAULT)
+            ImageCms.INTENT_PERCEPTUAL            = 0  # default
             ImageCms.INTENT_RELATIVE_COLORIMETRIC = 1
             ImageCms.INTENT_SATURATION            = 2
             ImageCms.INTENT_ABSOLUTE_COLORIMETRIC = 3
@@ -943,12 +943,12 @@ def isIntentSupported(profile, intent, direction):
     potential ``PyCMSError`` that will occur if they don't support the modes
     you select.
 
-    :param profile: EITHER a valid CmsProfile object, OR a string of the
-        filename of an ICC profile.
+    :param profile: EITHER a valid :py:class:`~PIL.ImageCms.CmsProfile` object,
+        OR a string of the filename of an ICC profile.
     :param intent: Integer (0-3) specifying the rendering intent you wish to
-        use with this profile
+        use with this profile::
 
-            ImageCms.INTENT_PERCEPTUAL            = 0 (DEFAULT)
+            ImageCms.INTENT_PERCEPTUAL            = 0  # default
             ImageCms.INTENT_RELATIVE_COLORIMETRIC = 1
             ImageCms.INTENT_SATURATION            = 2
             ImageCms.INTENT_ABSOLUTE_COLORIMETRIC = 3
@@ -956,11 +956,11 @@ def isIntentSupported(profile, intent, direction):
         see the pyCMS documentation for details on rendering intents and what
             they do.
     :param direction: Integer specifying if the profile is to be used for
-        input, output, or proof
+        input, output, or proof::
 
-            INPUT  = 0 (or use ImageCms.DIRECTION_INPUT)
-            OUTPUT = 1 (or use ImageCms.DIRECTION_OUTPUT)
-            PROOF  = 2 (or use ImageCms.DIRECTION_PROOF)
+            ImageCms.DIRECTION_INPUT  = 0
+            ImageCms.DIRECTION_OUTPUT = 1
+            ImageCms.DIRECTION_PROOF  = 2
 
     :returns: 1 if the intent/direction are supported, -1 if they are not.
     :exception PyCMSError:
