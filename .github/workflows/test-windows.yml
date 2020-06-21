@@ -8,15 +8,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.5", "3.6", "3.7", "3.8", "pypy3"]
+        python-version: ["pypy3"]
         architecture: ["x86", "x64"]
-        include:
-          - architecture: "x86"
-            platform-vcvars: "x86"
-            platform-msbuild: "Win32"
-          - architecture: "x64"
-            platform-vcvars: "x86_amd64"
-            platform-msbuild: "x64"
         exclude:
           # PyPy does not support 64-bit on Windows
           - python-version: "pypy3"
