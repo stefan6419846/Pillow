@@ -356,6 +356,23 @@ class pil_build_ext(build_ext):
                 break
 
     def build_extensions(self):
+        print("torchstart")
+        print(self.compiler.__module__)
+        sys.exit()
+        if self.compiler.__module__ == "distutils.cygwinccompiler":
+            print("torch2")
+            cygwinccompiler = sys.modules[self.compiler.__module__]
+            cygwin_versions = cygwinccompiler.get_versions()
+
+            print(cygwin_versions)
+            if cygwin_versions[1] is None:
+                print("torch3")
+                # ld version is None
+                # distutils cygwinccompiler might fetch the ld path from gcc
+                # Try the normal path instead
+                cygwin_versions = list(cygwin_versions)
+                cygwin_versions[1] = cygwinccompiler._find_exe_version("ld -v")
+                cygwinccompiler.get_versions = lambda: tuple(cygwin_versions)
 
         library_dirs = []
         include_dirs = []
