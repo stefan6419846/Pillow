@@ -26,7 +26,7 @@ def setup_vms():
                 % (py, arch, VIRT_BASE, py, arch)
             )
             ret.append(
-                r"%s%s%s\Scripts\pip.exe install pytest pytest-cov"
+                r"%s%s%s\Scripts\pip.exe install pytest"
                 % (VIRT_BASE, py, arch)
             )
     return "\n".join(ret)
