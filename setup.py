@@ -133,6 +133,30 @@ class RequiredDependencyException(Exception):
 PLATFORM_MINGW = os.name == "nt" and "GCC" in sys.version
 PLATFORM_PYPY = hasattr(sys, "pypy_version_info")
 
+if sys.platform == "win32" and PLATFORM_MINGW:
+    import setuptools.command.build_ext as build_ext_module
+    print("torch")
+
+    def new_compiler(plat=None, compiler=None, verbose=0, dry_run=0, force=0):
+        compiler = new_compiler(plat, compiler, verbose, dry_run, force)
+        print("torch2")
+        if compiler.__module__ == "distutils.cygwinccompiler":
+            print("torch3")
+            cygwinccompiler = sys.modules[self.compiler.__module__]
+            cygwin_versions = cygwinccompiler.get_versions()
+
+            if cygwin_versions[1] is None:
+                print("torch4")
+                # ld version is None
+                # distutils cygwinccompiler might fetch the ld path from gcc
+                # Try the normal path instead
+                cygwin_versions = list(cygwin_versions)
+                cygwin_versions[1] = cygwinccompiler._find_exe_version("ld -v")
+                cygwinccompiler.get_versions = lambda: tuple(cygwin_versions)
+        return compiler
+
+    build_ext_module.new_compiler = new_compiler
+
 
 def _dbg(s, tp=None):
     if DEBUG:
@@ -356,23 +380,6 @@ class pil_build_ext(build_ext):
                 break
 
     def build_extensions(self):
-        print("torchstart")
-        print(self.compiler.__module__)
-        sys.exit()
-        if self.compiler.__module__ == "distutils.cygwinccompiler":
-            print("torch2")
-            cygwinccompiler = sys.modules[self.compiler.__module__]
-            cygwin_versions = cygwinccompiler.get_versions()
-
-            print(cygwin_versions)
-            if cygwin_versions[1] is None:
-                print("torch3")
-                # ld version is None
-                # distutils cygwinccompiler might fetch the ld path from gcc
-                # Try the normal path instead
-                cygwin_versions = list(cygwin_versions)
-                cygwin_versions[1] = cygwinccompiler._find_exe_version("ld -v")
-                cygwinccompiler.get_versions = lambda: tuple(cygwin_versions)
 
         library_dirs = []
         include_dirs = []
