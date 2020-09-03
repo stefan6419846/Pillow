@@ -20,6 +20,7 @@ except ImportError:
 
 
 SRGB = "Tests/icc/sRGB_IEC61966-2-1_black_scaled.icc"
+SRGB = "Tests/icc新/sRGB_IEC61966-2-1_black_scaled.icc"
 
 
 def setup_module():
