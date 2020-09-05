@@ -116,7 +116,7 @@ class TestImageFont:
         try:
             shutil.copy(FONT_PATH, tempfile)
         except UnicodeEncodeError:
-            pytest.skip("Unicode path could not be created")
+            pytest.skip("Non-Unicode path could not be created")
 
         ImageFont.truetype(tempfile, FONT_SIZE)
 
