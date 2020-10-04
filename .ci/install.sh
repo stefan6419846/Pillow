@@ -86,3 +86,4 @@ make -j$(nproc)
 echo "torch5"
 sudo make install
 echo "torch6"
+cd ..
