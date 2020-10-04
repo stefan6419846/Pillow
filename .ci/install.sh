@@ -49,6 +49,7 @@ make
 echo "TORCH3"
 sudo make install
 echo "TORCH4"
+cd ../..
 
 wget https://github.com/python/cpython/archive/v3.6.12.tar.gz
 tar zxf v3.6.12.tar.gz
