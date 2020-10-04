@@ -27,3 +27,11 @@ pip install olefile
 pip install numpy
 
 tar xvzf tk8.6.10-src.tar.gz
+cd tk8.6.10/unix
+echo "TORCH1"
+./configure
+echo "TORCH2"
+make
+echo "TORCH3"
+sudo make install
+echo "TORCH4"
