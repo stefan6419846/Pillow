@@ -32,6 +32,8 @@ tar xvzf tk8.6.10-src.tar.gz
 cd tk8.6.10/unix
 echo "TORCH1"
 
+export LDFLAGS="-shared-libasan"
+
 FLAGS=()
 FLAGS+=("--with-address-sanitizer")
 #FLAGS+=("--disable-ipv6")
