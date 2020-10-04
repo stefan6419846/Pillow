@@ -67,20 +67,19 @@ cd cpython-3.6.12/
 #CFLAGS=${CFLAGS//"-pthread"/}
 #echo "torchrunD4"
 
-#FLAGS=()
-#FLAGS+=("--with-address-sanitizer")
-#FLAGS+=("--disable-ipv6")
-#FLAGS+=("--with-memory-sanitizer")
+FLAGS=()
+FLAGS+=("--with-address-sanitizer")
+FLAGS+=("--disable-ipv6")
+FLAGS+=("--with-memory-sanitizer")
 # installing ensurepip takes a while with MSAN instrumentation, so
 # we disable it here
-#FLAGS+=("--without-ensurepip")
+FLAGS+=("--without-ensurepip")
 # -msan-keep-going is needed to allow MSAN's halt_on_error to function
-#FLAGS+=("CFLAGS=-mllvm -msan-keep-going=1")
-#    FLAGS+=("--with-undefined-behavior-sanitizer")
+FLAGS+=("CFLAGS=-mllvm -msan-keep-going=1")
+FLAGS+=("--with-undefined-behavior-sanitizer")
 
 echo "torch3"
-./configure
-# "${FLAGS[@]}" CC="clang"
+./configure "${FLAGS[@]}" CC="clang"
 echo "torch4"
 make -j$(nproc)
 echo "torch5"
