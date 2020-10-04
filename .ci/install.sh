@@ -26,7 +26,7 @@ PYTHONOPTIMIZE=0 pip install cffi
 pip install olefile
 pip install numpy
 
-sudo apt-get install clang gobjc++
+sudo apt-get install clang
 
 tar xvzf tk8.6.10-src.tar.gz
 cd tk8.6.10/unix
