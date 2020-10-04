@@ -68,15 +68,15 @@ cd cpython-3.6.12/
 #echo "torchrunD4"
 
 FLAGS=()
-FLAGS+=("--with-address-sanitizer")
+#FLAGS+=("--with-address-sanitizer")
 FLAGS+=("--disable-ipv6")
 FLAGS+=("--with-memory-sanitizer")
 # installing ensurepip takes a while with MSAN instrumentation, so
 # we disable it here
 FLAGS+=("--without-ensurepip")
 # -msan-keep-going is needed to allow MSAN's halt_on_error to function
-FLAGS+=("CFLAGS=-mllvm -msan-keep-going=1")
-FLAGS+=("--with-undefined-behavior-sanitizer")
+#FLAGS+=("CFLAGS=-mllvm -msan-keep-going=1")
+#FLAGS+=("--with-undefined-behavior-sanitizer")
 
 echo "torch3"
 ./configure "${FLAGS[@]}" CC="clang"
