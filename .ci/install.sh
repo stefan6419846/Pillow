@@ -25,3 +25,5 @@ pip install --upgrade pip
 PYTHONOPTIMIZE=0 pip install cffi
 pip install olefile
 pip install numpy
+
+tar xvzf tk8.6.10-src.tar.gz
