@@ -41,7 +41,7 @@ FLAGS+=("--with-memory-sanitizer")
 #FLAGS+=("--without-ensurepip")
 # -msan-keep-going is needed to allow MSAN's halt_on_error to function
 FLAGS+=("CFLAGS=-mllvm -msan-keep-going=1")
-    FLAGS+=("--with-undefined-behavior-sanitizer")
+FLAGS+=("--with-undefined-behavior-sanitizer")
 
 echo "torch3"
 ./configure "${FLAGS[@]}" CC="clang"
@@ -77,7 +77,7 @@ FLAGS+=("--with-memory-sanitizer")
 # we disable it here
 FLAGS+=("--without-ensurepip")
 # -msan-keep-going is needed to allow MSAN's halt_on_error to function
-FLAGS+=("CFLAGS=-msan-keep-going=1")
+FLAGS+=("CFLAGS=-mllvm -msan-keep-going=1")
 #FLAGS+=("--with-undefined-behavior-sanitizer")
 
 echo "torch3"
