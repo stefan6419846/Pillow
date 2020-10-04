@@ -51,9 +51,9 @@ sudo make install
 echo "TORCH4"
 cd ../..
 
-wget https://github.com/python/cpython/archive/v3.6.12.tar.gz
-tar zxf v3.6.12.tar.gz
-cd cpython-3.6.12/
+wget https://github.com/python/cpython/archive/v3.8.6.tar.gz
+tar zxf v3.8.6.tar.gz
+cd cpython-3.8.6/
 
 # Ignore memory leaks from python scripts invoked in the build
 #echo "torchrunD2"
@@ -79,7 +79,7 @@ FLAGS+=("CFLAGS=-msan-keep-going=1")
 #FLAGS+=("--with-undefined-behavior-sanitizer")
 
 echo "torch3"
-./configure "${FLAGS[@]}"
+./configure "${FLAGS[@]}" CC="clang"
 echo "torch4"
 make -j$(nproc)
 echo "torch5"
@@ -90,9 +90,9 @@ cd ..
 echo "torchrunA"
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 echo "torchrunB"
-sudo python3.6 get-pip.py
+sudo python3.8 get-pip.py
 echo "torchrunC"
-sudo python3.6 -m pip install numpy
+sudo python3.8 -m pip install numpy
 echo "torchrunD"
-sudo python3.6 setup.py install
+sudo python3.8 setup.py install
 echo "torchrunD1"
