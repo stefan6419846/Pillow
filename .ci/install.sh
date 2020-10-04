@@ -81,9 +81,9 @@ FLAGS+=("CFLAGS=-msan-keep-going=1")
 #FLAGS+=("--with-undefined-behavior-sanitizer")
 
 echo "torch3"
-./configure "${FLAGS[@]}" CC="clang"
+sudo ./configure "${FLAGS[@]}" CC="clang"
 echo "torch4"
-make -j$(nproc)
+sudo make -j$(nproc)
 echo "torch5"
 sudo make install
 echo "torch6"
