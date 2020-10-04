@@ -2,9 +2,9 @@
 
 set -e
 
-coverage erase
 if [ $(uname) == "Darwin" ]; then
     export CPPFLAGS="-I/usr/local/miniconda/include";
 fi
-make clean
-make install-coverage
+echo "torchrun"
+sudo python3.6 -c "from PIL import Image;from PIL import ImageTk;import tkinter;root = tkinter.Tk();example_image_array = np.full((100,100), 123, dtype=np.uint8);example_image = Image.fromarray(example_image_array);" 2&>1 | grep use-of-uninitialized-value
+echo "torchrun_end"

@@ -19,41 +19,59 @@ set -e
 
 sudo apt-get -qq install libfreetype6-dev liblcms2-dev python3-tk\
                          ghostscript libffi-dev libjpeg-turbo-progs libopenjp2-7-dev\
-                         cmake imagemagick libharfbuzz-dev libfribidi-dev
+                         cmake imagemagick libasan2
 
 pip install --upgrade pip
 PYTHONOPTIMIZE=0 pip install cffi
-pip install coverage
 pip install olefile
-pip install -U pytest
-pip install -U pytest-cov
-pip install pyroma
-pip install test-image-results
 pip install numpy
 
-# TODO Remove when 3.9-dev includes setuptools 49.3.2+:
-if [ "$GHA_PYTHON_VERSION" == "3.9-dev" ]; then pip install -U "setuptools>=49.3.2" ; fi
+wget https://github.com/python/cpython/archive/v3.6.12.tar.gz
+tar zxf v3.6.12.tar.gz
+cd cpython-3.6.12/
 
-if [[ $TRAVIS_PYTHON_VERSION == 3.* ]]; then
-  # arm64, ppc64le, s390x CPUs:
-  # "ERROR: Could not find a version that satisfies the requirement pyqt5"
-  if [[ $TRAVIS_CPU_ARCH == "amd64" ]]; then
-    sudo apt-get -qq install libxcb-xinerama0 pyqt5-dev-tools
-    pip install pyqt5
-  fi
-fi
+./configure
+make -j$(nproc)
+sudo make install
+echo "torchrunA"
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+echo "torchrunB"
+sudo python3.6 get-pip.py
+echo "torchrunC"
+sudo python3.6 -m pip install numpy
+cd ..
+echo "torchrunD"
+sudo python3.6 setup.py install
+echo "torchrunD1"
+cd cpython-3.6.12/
 
-# docs only on Python 3.8
-if [ "$TRAVIS_PYTHON_VERSION" == "3.8" ]; then pip install -r requirements.txt ; fi
+# Ignore memory leaks from python scripts invoked in the build
+echo "torchrunD2"
+#export ASAN_OPTIONS="detect_leaks=0"
+echo "torchrunD25"
+export MSAN_OPTIONS="halt_on_error=0:exitcode=0:report_umrs=0"
 
-# webp
-pushd depends && ./install_webp.sh && popd
+# Remove -pthread from CFLAGS, this trips up ./configure
+# which thinks pthreads are available without any CLI flags
+echo "torchrunD3"
+CFLAGS=${CFLAGS//"-pthread"/}
+echo "torchrunD4"
 
-# libimagequant
-pushd depends && ./install_imagequant.sh && popd
+FLAGS=()
+#FLAGS+=("--with-address-sanitizer")
+FLAGS+=("--disable-ipv6")
+FLAGS+=("--with-memory-sanitizer")
+# installing ensurepip takes a while with MSAN instrumentation, so
+# we disable it here
+FLAGS+=("--without-ensurepip")
+# -msan-keep-going is needed to allow MSAN's halt_on_error to function
+FLAGS+=("CFLAGS=-mllvm -msan-keep-going=1")
+#    FLAGS+=("--with-undefined-behavior-sanitizer")
 
-# raqm
-pushd depends && ./install_raqm.sh && popd
-
-# extra test images
-pushd depends && ./install_extra_test_images.sh && popd
+echo "torch3"
+./configure "${FLAGS[@]}" CC="clang"
+echo "torch4"
+make -j$(nproc)
+echo "torch5"
+sudo make install
+echo "torch6"

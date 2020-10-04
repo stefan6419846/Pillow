@@ -19,28 +19,10 @@ matrix:
       name: "3.8 Xenial"
       services: xvfb
 
-  allow_failures:
-  - python: "3.9-dev"
-
 install:
   - |
-    if [ "$LINT" == "true" ]; then
-      pip install tox
-    else
-      .ci/install.sh;
-    fi
+    .ci/install.sh
 
 script:
 - |
-  if [ "$LINT" == "true" ]; then
-    tox -e lint
-  else
-    .ci/build.sh
-    .ci/test.sh
-  fi
-
-after_success:
-- |
-  if [ "$LINT" == "" ]; then
-    .ci/after_success.sh
-  fi
+  .ci/build.sh
