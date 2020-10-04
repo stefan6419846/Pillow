@@ -54,21 +54,6 @@ wget https://github.com/python/cpython/archive/v3.6.12.tar.gz
 tar zxf v3.6.12.tar.gz
 cd cpython-3.6.12/
 
-./configure
-make -j$(nproc)
-sudo make install
-echo "torchrunA"
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-echo "torchrunB"
-sudo python3.6 get-pip.py
-echo "torchrunC"
-sudo python3.6 -m pip install numpy
-cd ..
-echo "torchrunD"
-sudo python3.6 setup.py install
-echo "torchrunD1"
-cd cpython-3.6.12/
-
 # Ignore memory leaks from python scripts invoked in the build
 #echo "torchrunD2"
 #export ASAN_OPTIONS="detect_leaks=0"
@@ -101,3 +86,13 @@ echo "torch5"
 sudo make install
 echo "torch6"
 cd ..
+
+echo "torchrunA"
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+echo "torchrunB"
+sudo python3.6 get-pip.py
+echo "torchrunC"
+sudo python3.6 -m pip install numpy
+echo "torchrunD"
+sudo python3.6 setup.py install
+echo "torchrunD1"
