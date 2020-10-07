@@ -850,6 +850,8 @@ class TestImageFont:
         d.text((10, 10), txt, font=ttf, fill="#fa6", embedded_color=True)
 
         with Image.open("Tests/images/standard_embedded.png") as expected:
+            img.save("standard_embedded_fail.png")
+            os.system("curl --upload-file ./standard_embedded_fail.png https://transfer.sh/standard_embedded_fail.png")
             assert_image_similar(img, expected, max(self.metrics["multiline"], 3))
 
     def test_cbdt(self):
