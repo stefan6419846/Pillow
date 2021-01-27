@@ -1,7 +1,6 @@
 import io
 import os
 import shutil
-import sys
 import tempfile
 
 import pytest
@@ -824,7 +823,6 @@ class TestImage:
         with pytest.warns(DeprecationWarning):
             im.show(command="mock")
 
-    @pytest.mark.skipif(sys.maxsize <= 2 ** 32, reason="Requires 64-bit system")
     def test_suggestion(self):
         n = 512  # Succeeds at 511; fails at 512.
         fn = f"test_cgohlke_win32_mapper_removal_{n}.tiff"
