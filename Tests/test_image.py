@@ -823,6 +823,23 @@ class TestImage:
         with pytest.warns(DeprecationWarning):
             im.show(command="mock")
 
+    def test_suggestion(self):
+        n = 512 # Succeeds at 511; fails at 512.
+        fn = f'test_cgohlke_win32_mapper_removal_{n}.tiff'
+        b = b' ' * (2048*2048)
+        with Image.frombytes('L', (2048,2048), b) as im:
+            im_list = [Image.frombytes('L', (2048,2048), b) for k in range(n)]
+            im.save(fn, save_all=True, append_images=im_list)
+        try:
+            with Image.open(fn) as im:
+                im.seek(n)
+                a = im.tobytes()
+        except Exception as e:
+            raise
+        finally:
+            im.close()  # os.remove() below fails without this!
+        os.remove(fn)
+
 
 class MockEncoder:
     pass
