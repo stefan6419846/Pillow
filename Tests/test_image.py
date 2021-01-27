@@ -1,6 +1,7 @@
 import io
 import os
 import shutil
+import sys
 import tempfile
 
 import pytest
@@ -823,12 +824,13 @@ class TestImage:
         with pytest.warns(DeprecationWarning):
             im.show(command="mock")
 
+    @pytest.mark.skipif(sys.maxsize <= 2 ** 32, reason="Requires 64-bit system")
     def test_suggestion(self):
-        n = 512 # Succeeds at 511; fails at 512.
-        fn = f'test_cgohlke_win32_mapper_removal_{n}.tiff'
-        b = b' ' * (2048*2048)
-        with Image.frombytes('L', (2048,2048), b) as im:
-            im_list = [Image.frombytes('L', (2048,2048), b) for k in range(n)]
+        n = 512  # Succeeds at 511; fails at 512.
+        fn = f"test_cgohlke_win32_mapper_removal_{n}.tiff"
+        b = b" " * (2048 * 2048)
+        with Image.frombytes("L", (2048, 2048), b) as im:
+            im_list = [Image.frombytes("L", (2048, 2048), b) for k in range(n)]
             im.save(fn, save_all=True, append_images=im_list)
         try:
             with Image.open(fn) as im:
