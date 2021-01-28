@@ -102,10 +102,6 @@ jobs:
       if: steps.build-cache.outputs.cache-hit != 'true'
       run: "& winbuild\\build\\build_dep_zlib.cmd"
 
-    - name: Build dependencies / LibTiff
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: "& winbuild\\build\\build_dep_libtiff.cmd"
-
     - name: Build dependencies / WebP
       if: steps.build-cache.outputs.cache-hit != 'true'
       run: "& winbuild\\build\\build_dep_libwebp.cmd"
@@ -258,7 +254,6 @@ jobs:
               ${{ matrix.package }}-libimagequant \
               ${{ matrix.package }}-libjpeg-turbo \
               ${{ matrix.package }}-libraqm \
-              ${{ matrix.package }}-libtiff \
               ${{ matrix.package }}-libwebp \
               ${{ matrix.package }}-openjpeg2 \
               subversion
