@@ -7,24 +7,6 @@ from PIL import Image
 from .helper import is_win32
 
 
-def test_overflow():
-    # There is the potential to overflow comparisons in map.c
-    # if there are > SIZE_MAX bytes in the image or if
-    # the file encodes an offset that makes
-    # (offset + size(bytes)) > SIZE_MAX
-
-    # Note that this image triggers the decompression bomb warning:
-    max_pixels = Image.MAX_IMAGE_PIXELS
-    Image.MAX_IMAGE_PIXELS = None
-
-    # This image hits the offset test.
-    with Image.open("Tests/images/l2rgb_read.bmp") as im:
-        with pytest.raises((ValueError, MemoryError, OSError)):
-            im.load()
-
-    Image.MAX_IMAGE_PIXELS = max_pixels
-
-
 def test_suggestion():
     with Image.open("Tests/images/l2rgb_read.bmp") as im:
         with pytest.raises((ValueError, MemoryError, OSError)):
