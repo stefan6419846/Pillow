@@ -197,6 +197,7 @@ class ImageFile(Image.Image):
 
                     with open(self.filename) as fp:
                         self.map = mmap.mmap(fp.fileno(), 0, access=mmap.ACCESS_READ)
+                    print("offset", offset)
                     self.im = Image.core.map_buffer(
                         self.map, self.size, decoder_name, offset, args
                     )
