@@ -6,8 +6,6 @@ from PIL import Image
 
 from .helper import is_win32
 
-pytestmark = pytest.mark.skipif(is_win32(), reason="Win32 does not call map_buffer")
-
 
 def test_overflow():
     # There is the potential to overflow comparisons in map.c
