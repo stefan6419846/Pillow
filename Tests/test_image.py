@@ -21,4 +21,5 @@ from .helper import (
 class TestImage:
     def test_suggestion(self):
         with Image.open("Tests/images/l2rgb_read.bmp") as im:
-            im.tobytes()
+            with pytest.raises((ValueError, MemoryError, OSError)):
+                im.tobytes()
