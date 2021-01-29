@@ -21,7 +21,7 @@ def test_overflow():
 
     # This image hits the offset test.
     with Image.open("Tests/images/l2rgb_read.bmp") as im:
-        with pytest.raises((ValueError, MemoryError, OSError)):
+        with pytest.raises((ValueError, OSError)):
             im.load()
 
     Image.MAX_IMAGE_PIXELS = max_pixels
