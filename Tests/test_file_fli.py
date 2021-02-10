@@ -39,11 +39,9 @@ def test_unclosed_file():
 
 def test_closed_file():
     def open():
-        im = Image.open(static_test_file)
-        im.load()
-        im.close()
+        Image.open(static_test_file)
 
-    pytest.warns(None, open)
+    pytest.warns(ResourceWarning, open)
 
 
 def test_context_manager():
