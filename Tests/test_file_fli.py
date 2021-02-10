@@ -41,7 +41,7 @@ def test_closed_file():
     def open():
         Image.open(static_test_file)
 
-    pytest.warns(ResourceWarning, open)
+    pytest.warns(None, open)
 
 
 def test_context_manager():
