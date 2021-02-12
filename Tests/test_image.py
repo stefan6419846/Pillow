@@ -823,6 +823,16 @@ class TestImage:
         with pytest.warns(DeprecationWarning):
             im.show(command="mock")
 
+    def test_comparison(self):
+        import binascii
+        im = Image.open("Tests/images/old-style-jpeg-compression.png").convert("RGB")
+        newsize = tuple(int(x * 0.2) for x in im.size)
+        newim = im.resize(newsize, resample=Image.LANCZOS)
+        b = io.BytesIO()
+        newim.save(b, format="GIF")
+        crc = "%08x" % (binascii.crc32(b.getvalue()) & 0xFFFFFFFF)
+        assert crc == "9812d6ff"
+
 
 class MockEncoder:
     pass
