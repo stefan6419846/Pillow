@@ -826,7 +826,9 @@ class TestImage:
     def test_comparison(self):
         with Image.open("Tests/images/old-style-jpeg-compression.png") as im:
             im = im.resize((435, 2080), resample=Image.LANCZOS)
-            with Image.open("out.png") as expected:
+            im.save("out2.gif")
+            with Image.open("out2.gif") as expected:
+                im = Image.open("out.gif")
                 assert_image_equal(im, expected)
 
 
