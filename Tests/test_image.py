@@ -831,7 +831,7 @@ class TestImage:
         b = io.BytesIO()
         newim.save(b, format="GIF")
         crc = "%08x" % (binascii.crc32(b.getvalue()) & 0xFFFFFFFF)
-        assert crc == "9812d6ff"
+        assert crc == "9160fc08"
 
 
 class MockEncoder:
