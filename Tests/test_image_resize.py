@@ -135,6 +135,18 @@ class TestImagingCoreResize:
         with pytest.raises(ValueError):
             self.resize(hopper(), (10, 10), 9)
 
+    def test_cross_platform(self, tmp_path):
+        # This test is intended for only check for consistent behaviour across
+        # platforms. So if a future Pillow change requires that the test file
+        # be updated, that is okay.
+        im = hopper().resize((64, 64))
+        temp_file = str(tmp_path / "temp.gif")
+        im.save(temp_file)
+
+        with Image.open(temp_file) as reloaded:
+            with Image.open("Tests/images/hopper_resized.gif") as expected:
+                assert_image_equal(reloaded, expected)
+
 
 @pytest.fixture
 def gradients_image():
