@@ -824,12 +824,12 @@ class TestImage:
             im.show(command="mock")
 
     def test_comparison(self):
-        with Image.open("Tests/images/hopper.png") as im:
-            im = im.resize((64, 64), resample=Image.LANCZOS)
-            im.save("out2.gif")
-            with Image.open("out2.gif") as expected:
-                im = Image.open("out.gif")
-                assert_image_equal(im, expected)
+        im = hopper()
+        im = im.resize((64, 64), resample=Image.LANCZOS)
+        im.save("out2.gif")
+        with Image.open("out2.gif") as expected:
+            im = Image.open("out.gif")
+            assert_image_equal(im, expected)
 
 
 class MockEncoder:
