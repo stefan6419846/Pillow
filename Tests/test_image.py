@@ -823,13 +823,14 @@ class TestImage:
         with pytest.warns(DeprecationWarning):
             im.show(command="mock")
 
-    def test_comparison(self):
-        im = hopper()
-        im = im.resize((64, 64), resample=Image.LANCZOS)
-        im.save("out2.gif")
-        with Image.open("out2.gif") as expected:
-            im = Image.open("out.gif")
-            assert_image_equal(im, expected)
+    def test_comparison(self, tmp_path):
+        im = hopper().resize((64, 64))
+        temp_file = str(tmp_path / "temp.gif")
+        im.save(temp_file)
+
+        with Image.open(temp_file) as reloaded:
+            with Image.open("Tests/images/hopper_resized.gif") as expected:
+                assert_image_equal(reloaded, expected)
 
 
 class MockEncoder:
