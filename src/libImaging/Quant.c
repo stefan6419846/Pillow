@@ -804,27 +804,24 @@ ssort(void  *base, uint32_t nmemb, uint32_t size,
     char *a, *b, tmp;
 
     sz_nmemb = size * nmemb;
-    for (gap = 0; ++gap < nmemb; ) {
+    for (gap = 0; ++gap < nmemb;)
         gap *= 3;
-    }
     while (gap /= 3) {
         sz_gap = size * gap;
         for (i = sz_gap; i < sz_nmemb; i += size) {
-            for (j = i - sz_gap; ; j -= sz_gap) {
+            for (j = i - sz_gap; ;j -= sz_gap) {
                 a = (char *)base + j;
                 b = a + sz_gap;
-                if ((*compar)(a, b) <= 0) {
+                if ((*compar)(a, b) <= 0)
                     break;
-                }
                 k = size;
                 do {
                     tmp = *a;
                     *a++ = *b;
                     *b++ = tmp;
                 } while (--k);
-                if (j < sz_gap) {
+                if (j < sz_gap)
                     break;
-                }
             }
         }
     }
