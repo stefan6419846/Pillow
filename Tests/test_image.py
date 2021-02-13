@@ -824,8 +824,8 @@ class TestImage:
             im.show(command="mock")
 
     def test_comparison(self):
-        with Image.open("Tests/images/old-style-jpeg-compression.png") as im:
-            im = im.resize((435, 2080), resample=Image.LANCZOS)
+        with Image.open("Tests/images/hopper.png") as im:
+            im = im.resize((64, 64), resample=Image.LANCZOS)
             im.save("out2.gif")
             with Image.open("out2.gif") as expected:
                 im = Image.open("out.gif")
