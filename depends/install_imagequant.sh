@@ -7,6 +7,9 @@ archive=libimagequant-2.14.0
 
 pushd $archive
 
+sudo apt-get install gcc-9
+
+./configure --with-openmp CFLAGS="-fPIC"
 make shared
 sudo cp libimagequant.so* /usr/lib/
 sudo cp libimagequant.h /usr/include/
