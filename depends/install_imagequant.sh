@@ -7,6 +7,8 @@ archive=libimagequant-2.14.0
 
 pushd $archive
 
+./configure --prefix=/usr --libdir=/usr/lib64 --with-openmp CFLAGS="-fPIC"
+make clean && make shared
 make shared
 sudo cp libimagequant.so* /usr/lib/
 sudo cp libimagequant.h /usr/include/
