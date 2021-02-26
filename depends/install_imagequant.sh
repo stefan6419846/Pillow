@@ -9,6 +9,8 @@ pushd $archive
 
 sudo apt-get install gcc-9
 
+echo "torch"
+gcc --version
 ./configure --with-openmp
 make shared
 sudo cp libimagequant.so* /usr/lib/
