@@ -92,7 +92,7 @@ _tiffWriteProc(thandle_t hdata, tdata_t buf, tsize_t size) {
         /* malloc check ok, overflow checked above */
         new_data = realloc(state->data, newsize);
         if (!new_data) {
-            // fail out
+            // fail out.
             return 0;
         }
         state->data = new_data;
@@ -564,7 +564,7 @@ ImagingLibTiffDecode(
             for (x = state->xoff; x < state->xsize; x += tile_width) {
                 /* Sanity Check. Apparently in some cases, the TiffReadRGBA* functions
                    have a different view of the size of the tiff than we're getting from
-                   other functions. So, we need to check here. 
+                   other functions. So, we need to check here.
                 */
                 if (!TIFFCheckTile(tiff, x, y, 0, 0)) {
                     TRACE(("Check Tile Error, Tile at %dx%d\n", x, y));
