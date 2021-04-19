@@ -49,6 +49,7 @@ from fractions import Fraction
 from numbers import Number, Rational
 
 from . import Image, ImageFile, ImagePalette, TiffTags
+from .Image import Exif
 from ._binary import o8
 from .TiffTags import TYPES
 
@@ -475,6 +476,7 @@ class ImageFileDirectory_v2(MutableMapping):
             self._endian = "<"
         else:
             raise SyntaxError("not a TIFF IFD")
+        self.fp = None
         self.tagtype = {}
         """ Dictionary of tag types """
         self.reset()
@@ -740,6 +742,7 @@ class ImageFileDirectory_v2(MutableMapping):
 
     def load(self, fp):
 
+        self.fp = fp
         self.reset()
         self._offset = fp.tell()
 
@@ -792,6 +795,12 @@ class ImageFileDirectory_v2(MutableMapping):
         except OSError as msg:
             warnings.warn(str(msg))
             return
+
+    def get_ifd(self, tag):
+        exif = Exif()
+        exif.fp = self.fp
+        exif.endian = self._endian
+        return exif._get_ifd_dict(self[tag])
 
     def tobytes(self, offset=0):
         # FIXME What about tagdata?

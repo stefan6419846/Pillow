@@ -3313,6 +3313,12 @@ class Exif(MutableMapping):
         # returns a dict with any single item tuples/lists as individual values
         return {k: self._fixup(v) for k, v in src_dict.items()}
 
+    def _get_head(self):
+        if self.endian == "<":
+            return b"II\x2A\x00\x08\x00\x00\x00"
+        else:
+            return b"MM\x00\x2A\x00\x00\x00\x08"
+
     def _get_ifd_dict(self, offset):
         try:
             # an offset pointer to the location of the nested embedded IFD.
@@ -3323,7 +3329,7 @@ class Exif(MutableMapping):
         else:
             from . import TiffImagePlugin
 
-            info = TiffImagePlugin.ImageFileDirectory_v2(self.head)
+            info = TiffImagePlugin.ImageFileDirectory_v2(self._get_head())
             info.load(self.fp)
             return self._fixup_dict(info)
 
@@ -3373,10 +3379,7 @@ class Exif(MutableMapping):
     def tobytes(self, offset=8):
         from . import TiffImagePlugin
 
-        if self.endian == "<":
-            head = b"II\x2A\x00\x08\x00\x00\x00"
-        else:
-            head = b"MM\x00\x2A\x00\x00\x00\x08"
+        head = self._get_head()
         ifd = TiffImagePlugin.ImageFileDirectory_v2(ifh=head)
         for tag, value in self.items():
             if tag in [0x8769, 0x8225, 0x8825] and not isinstance(value, dict):
