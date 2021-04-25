@@ -33,6 +33,8 @@ python3 -m pip install test-image-results
 # TODO Remove condition when numpy supports 3.10
 if ! [ "$GHA_PYTHON_VERSION" == "3.10-dev" ]; then python3 -m pip install numpy ; fi
 
+python3 -m pip install opencv-python
+
 # TODO Remove when 3.8 / 3.9 includes setuptools 49.3.2+:
 if [ "$GHA_PYTHON_VERSION" == "3.8" ]; then python3 -m pip install -U "setuptools>=49.3.2" ; fi
 if [ "$GHA_PYTHON_VERSION" == "3.9" ]; then python3 -m pip install -U "setuptools>=49.3.2" ; fi
