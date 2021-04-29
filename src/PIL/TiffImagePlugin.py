@@ -1250,8 +1250,10 @@ class TiffImageFile(ImageFile.ImageFile):
         if bps_count > len(bps_tuple) and len(bps_tuple) == 1:
             bps_tuple = bps_tuple * bps_count
 
-        samplesPerPixel = self.tag_v2.get(SAMPLESPERPIXEL, 1)
-        if len(bps_tuple) != samplesPerPixel:
+        if (
+            SAMPLESPERPIXEL in self.tag_v2
+            and len(bps_tuple) != self.tag_v2[SAMPLESPERPIXEL]
+        ):
             raise SyntaxError("unknown data organization")
 
         # mode: check photometric interpretation and bits per pixel
