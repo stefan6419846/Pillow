@@ -14,7 +14,7 @@ def __win32_openDC(hWnd):
         if hDC < 0:
             hDC = hDC % 2147483647 + 2**31 + 1
         print('second', hDC)
-        if windll.user32.ReleaseDC(hWnd, hDC) == 0:
+        if windll.user32.ReleaseDC(hWnd, None) == 0:
             raise WindowsError("windll.user32.ReleaseDC failed : return 0")
 
 def pixel(x, y):
