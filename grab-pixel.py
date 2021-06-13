@@ -1,4 +1,4 @@
-import pyautogui
+import pyscreeze
 from PIL import ImageGrab
 
 
@@ -7,6 +7,6 @@ for i in range(runs):
     print([i, 'start'])
     im = ImageGrab.grab()
     print([i, 'mid'])
-    pyautogui.pixel(0, 0)
+    pyscreeze.pixel(0, 0)
 
 print('all {} runs passed'.format(runs))
