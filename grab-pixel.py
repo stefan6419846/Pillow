@@ -31,7 +31,7 @@ runs = 1000
 for i in range(runs):
     print([i, 'start'])
     NULL = c_int(0)
-    screen = windll.gdi32.CreateDCA(NULL,NULL,NULL,NULL)
+    screen = windll.gdi32.CreateDCA(c_char_p("DISPLAY").encode("utf-8"),NULL,NULL,NULL)
     windll.gdi32.DeleteDC(screen)
     print([i, 'mid'])
     pixel(0, 0)
