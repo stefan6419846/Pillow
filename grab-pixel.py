@@ -1,4 +1,4 @@
-from ctypes import windll
+from ctypes import windll, c_char_p, c_int
 from contextlib import contextmanager
 from PIL import ImageGrab
 
@@ -30,7 +30,8 @@ def pixel(x, y):
 runs = 1000
 for i in range(runs):
     print([i, 'start'])
-    screen = windll.gdi32.CreateDCW("DISPLAY")
+    NULL = c_int(0)
+    screen = windll.gdi32.CreateDCA(NULL,NULL,NULL,NULL)
     windll.gdi32.DeleteDC(screen)
     print([i, 'mid'])
     pixel(0, 0)
