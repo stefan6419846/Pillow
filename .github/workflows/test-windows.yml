@@ -42,5 +42,6 @@ jobs:
       run: |
         path %GITHUB_WORKSPACE%\\winbuild\\build\\bin;%PATH%
         python.exe -m pip install Pillow
+        python.exe -m pip install pywin32
         python.exe grab-pixel.py
       shell: cmd
