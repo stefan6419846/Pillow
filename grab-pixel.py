@@ -5,11 +5,13 @@ from PIL import ImageGrab
 @contextmanager
 def __win32_openDC(hWnd):
     hDC = windll.user32.GetDC(hWnd)
+    print('first', hDC)
     if hDC == 0: #NULL
         raise WindowsError("windll.user32.GetDC failed : return NULL")
     try:
         yield hDC
     finally:
+        print('second', hDC)
         if windll.user32.ReleaseDC(hWnd, hDC) == 0:
             raise WindowsError("windll.user32.ReleaseDC failed : return 0")
 
