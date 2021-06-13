@@ -12,7 +12,7 @@ def __win32_openDC(hWnd):
         yield hDC
     finally:
         if hDC < 0:
-            hDC = hDC % 2147483647 + 2**31 - 1
+            hDC = hDC % 2147483647 + 2**31 + 1
         print('second', hDC)
         if windll.user32.ReleaseDC(hWnd, hDC) == 0:
             raise WindowsError("windll.user32.ReleaseDC failed : return 0")
