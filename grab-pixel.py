@@ -1,7 +1,6 @@
 from ctypes import windll
 from contextlib import contextmanager
 from PIL import ImageGrab
-import win32gui
 
 @contextmanager
 def __win32_openDC(hWnd):
@@ -12,8 +11,10 @@ def __win32_openDC(hWnd):
     try:
         yield hDC
     finally:
+        if hDC < 0:
+            hDC = hDC % 2147483647 + 2**31
         print('second', hDC)
-        if win32gui.ReleaseDC(hWnd, hDC) == 0:
+        if windll.user32.ReleaseDC(hWnd, hDC) == 0:
             raise WindowsError("windll.user32.ReleaseDC failed : return 0")
 
 def pixel(x, y):
