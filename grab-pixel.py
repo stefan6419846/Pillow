@@ -30,7 +30,8 @@ def pixel(x, y):
 runs = 1000
 for i in range(runs):
     print([i, 'start'])
-    im = ImageGrab.grab()
+    screen = windll.gdi32.CreateDCW("DISPLAY")
+    windll.gdi32.DeleteDC(screen)
     print([i, 'mid'])
     pixel(0, 0)
 
