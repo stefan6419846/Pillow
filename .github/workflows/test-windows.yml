@@ -42,6 +42,6 @@ jobs:
       run: |
         path %GITHUB_WORKSPACE%\\winbuild\\build\\bin;%PATH%
         python.exe -m pip install Pillow
-        python.exe -m pip install git+git://github.com/asweigart/pyscreeze.git
+        python.exe -m pip install git+git://github.com/radarhere/pyscreeze.git
         python.exe grab-pixel.py
       shell: cmd
