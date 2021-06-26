@@ -934,7 +934,7 @@ PyImaging_GrabScreenX11(PyObject *self, PyObject *args) {
     height = screen->height_in_pixels;
 
     /* get image data */
-
+    xcb_map_window(connection, screen->root);
     reply = xcb_get_image_reply(
         connection,
         xcb_get_image(
