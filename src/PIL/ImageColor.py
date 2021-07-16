@@ -64,55 +64,77 @@ def getrgb(color):
             int(color[7:9], 16),
         )
 
-    m = re.match(r"rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$", color)
-    if m:
-        return (int(m.group(1)), int(m.group(2)), int(m.group(3)))
+    if color.count("(") == 1 and color[-1] == ")":
 
-    m = re.match(r"rgb\(\s*(\d+)%\s*,\s*(\d+)%\s*,\s*(\d+)%\s*\)$", color)
-    if m:
-        return (
-            int((int(m.group(1)) * 255) / 100.0 + 0.5),
-            int((int(m.group(2)) * 255) / 100.0 + 0.5),
-            int((int(m.group(3)) * 255) / 100.0 + 0.5),
-        )
+        def to_ints(values):
+            for value in values:
+                if not value.isdigit():
+                    return
+            try:
+                return (int(value) for value in values)
+            except ValueError:
+                pass
 
-    m = re.match(
-        r"hsl\(\s*(\d+\.?\d*)\s*,\s*(\d+\.?\d*)%\s*,\s*(\d+\.?\d*)%\s*\)$", color
-    )
-    if m:
-        from colorsys import hls_to_rgb
+        def to_floats(values):
+            try:
+                for value in values:
+                    if value.isdigit() or (value[-1] == "." and value[:-1].isdigit()):
+                        continue
+                    integer, fractional = value.split(".")
+                    if not integer.isdigit() or not fractional.isdigit():
+                        return
+                return tuple(float(value) for value in values)
+            except ValueError:
+                pass
 
-        rgb = hls_to_rgb(
-            float(m.group(1)) / 360.0,
-            float(m.group(3)) / 100.0,
-            float(m.group(2)) / 100.0,
-        )
-        return (
-            int(rgb[0] * 255 + 0.5),
-            int(rgb[1] * 255 + 0.5),
-            int(rgb[2] * 255 + 0.5),
-        )
+        def match():
+            type, values = color[:-1].split("(")
+            values = tuple(value.strip() for value in values.split(","))
+            if len(values) == 3:
+                if type == "rgb":
+                    percentages = all(value[-1] == "%" for value in values)
+                    if percentages:
+                        values = tuple(value[:-1] for value in values)
+                    values = to_ints(values)
+                    if not values:
+                        return
+                    if percentages:
+                        return tuple(
+                            int((value * 255) / 100.0 + 0.5) for value in values
+                        )
+                    else:
+                        return tuple(values)
+                elif (
+                    type in ("hsl", "hsb", "hsv")
+                    and values[1][-1] == "%"
+                    and values[2][-1] == "%"
+                ):
+                    values = to_floats((values[0], values[1][:-1], values[2][:-1]))
+                    if not values:
+                        return
+                    if type == "hsl":
+                        from colorsys import hls_to_rgb
 
-    m = re.match(
-        r"hs[bv]\(\s*(\d+\.?\d*)\s*,\s*(\d+\.?\d*)%\s*,\s*(\d+\.?\d*)%\s*\)$", color
-    )
-    if m:
-        from colorsys import hsv_to_rgb
+                        rgb = hls_to_rgb(
+                            values[0] / 360.0,
+                            values[2] / 100.0,
+                            values[1] / 100.0,
+                        )
+                    else:
+                        from colorsys import hsv_to_rgb
 
-        rgb = hsv_to_rgb(
-            float(m.group(1)) / 360.0,
-            float(m.group(2)) / 100.0,
-            float(m.group(3)) / 100.0,
-        )
-        return (
-            int(rgb[0] * 255 + 0.5),
-            int(rgb[1] * 255 + 0.5),
-            int(rgb[2] * 255 + 0.5),
-        )
+                        rgb = hsv_to_rgb(
+                            values[0] / 360.0,
+                            values[1] / 100.0,
+                            values[2] / 100.0,
+                        )
+                    return tuple(int(value * 255 + 0.5) for value in rgb)
+            elif len(values) == 4 and type == "rgba":
+                return tuple(to_ints(values))
 
-    m = re.match(r"rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$", color)
-    if m:
-        return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4)))
+        values = match()
+        if values:
+            return values
     raise ValueError(f"unknown color specifier: {repr(color)}")
 
 
