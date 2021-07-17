@@ -51,104 +51,14 @@ jobs:
     - name: Print build system information
       run: python .github/workflows/system-info.py
 
-    - name: python -m pip install wheel pytest pytest-cov pytest-timeout defusedxml
-      run: python -m pip install wheel pytest pytest-cov pytest-timeout defusedxml
+    - name: python -m pip install pytest pytest-cov pytest-timeout Pillow==8.3.0
+      run: python -m pip install pytest pytest-cov pytest-timeout Pillow==8.3.0
 
     - name: Install dependencies
       id: install
       run: |
-        7z x winbuild\depends\nasm-2.15.05-win64.zip "-o$env:RUNNER_WORKSPACE\"
-        echo "$env:RUNNER_WORKSPACE\nasm-2.15.05" >> $env:GITHUB_PATH
-
-        winbuild\depends\gs9540w32.exe /S
-        echo "C:\Program Files (x86)\gs\gs9.54.0\bin" >> $env:GITHUB_PATH
-
         xcopy /S /Y winbuild\depends\test_images\* Tests\images\
-
-        # make cache key depend on VS version
-        & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" | find """catalog_buildVersion""" | ForEach-Object { $a = $_.split(" ")[1]; echo "::set-output name=vs::$a" }
       shell: pwsh
-
-    - name: Cache build
-      id: build-cache
-      uses: actions/cache@v2
-      with:
-        path: winbuild\build
-        key:
-          ${{ hashFiles('winbuild\build_prepare.py') }}-${{ hashFiles('.github\workflows\test-windows.yml') }}-${{ env.pythonLocation }}-${{ steps.install.outputs.vs }}
-
-    - name: Prepare build
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: |
-        & python.exe winbuild\build_prepare.py -v --python=$env:pythonLocation --srcdir
-      shell: pwsh
-
-    - name: Build dependencies / libjpeg-turbo
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: "& winbuild\\build\\build_dep_libjpeg.cmd"
-
-    - name: Build dependencies / zlib
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: "& winbuild\\build\\build_dep_zlib.cmd"
-
-    - name: Build dependencies / LibTiff
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: "& winbuild\\build\\build_dep_libtiff.cmd"
-
-    - name: Build dependencies / WebP
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: "& winbuild\\build\\build_dep_libwebp.cmd"
-
-    # for FreeType CBDT/SBIX font support
-    - name: Build dependencies / libpng
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: "& winbuild\\build\\build_dep_libpng.cmd"
-
-    - name: Build dependencies / FreeType
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: "& winbuild\\build\\build_dep_freetype.cmd"
-
-    - name: Build dependencies / LCMS2
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: "& winbuild\\build\\build_dep_lcms2.cmd"
-
-    - name: Build dependencies / OpenJPEG
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: "& winbuild\\build\\build_dep_openjpeg.cmd"
-
-    # GPL licensed
-    - name: Build dependencies / libimagequant
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: "& winbuild\\build\\build_dep_libimagequant.cmd"
-
-    # Raqm dependencies
-    - name: Build dependencies / HarfBuzz
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: "& winbuild\\build\\build_dep_harfbuzz.cmd"
-
-    # Raqm dependencies
-    - name: Build dependencies / FriBidi
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: "& winbuild\\build\\build_dep_fribidi.cmd"
-
-    # trim ~150MB x 9
-    - name: Optimize build cache
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: rmdir /S /Q winbuild\build\src
-      shell: cmd
-
-    - name: Build Pillow
-      run: |
-        $FLAGS=""
-        if ('${{ github.event_name }}' -eq 'push') { $FLAGS="--disable-imagequant" }
-        & winbuild\build\build_pillow.cmd $FLAGS install
-        & $env:pythonLocation\python.exe selftest.py --installed
-      shell: pwsh
-
-    # failing with PyPy3
-    - name: Enable heap verification
-      if: "!contains(matrix.python-version, 'pypy')"
-      run: "& 'C:\\Program Files (x86)\\Windows Kits\\10\\Debuggers\\x86\\gflags.exe' /p /enable $env:pythonLocation\\python.exe"
 
     - name: Test Pillow
       run: |
@@ -173,27 +83,6 @@ jobs:
       run: |
         .ci/after_success.sh
       shell: pwsh
-
-    - name: Upload coverage
-      uses: codecov/codecov-action@v1
-      with:
-        file: ./coverage.xml
-        flags: GHA_Windows
-        name: ${{ runner.os }} Python ${{ matrix.python-version }} ${{ matrix.architecture }}
-
-    - name: Build wheel
-      id: wheel
-      if: "github.event_name == 'push'"
-      run: |
-        for /f "tokens=3 delims=/" %%a in ("${{ github.ref }}") do echo ::set-output name=dist::dist-%%a
-        winbuild\\build\\build_pillow.cmd --disable-imagequant bdist_wheel
-      shell: cmd
-
-    - uses: actions/upload-artifact@v2
-      if: "github.event_name == 'push'"
-      with:
-        name: ${{ steps.wheel.outputs.dist }}
-        path: dist\*.whl
 
   msys:
     runs-on: windows-2019
