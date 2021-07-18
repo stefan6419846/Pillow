@@ -64,55 +64,56 @@ def getrgb(color):
             int(color[7:9], 16),
         )
 
-    m = re.match(r"rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$", color)
+    m = re.match(r"rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$", color)
     if m:
-        return (int(m.group(1)), int(m.group(2)), int(m.group(3)))
+        values = (int(m.group(1)), int(m.group(2)), int(m.group(3)))
+        if max(values) <= 255:
+            return values
 
-    m = re.match(r"rgb\(\s*(\d+)%\s*,\s*(\d+)%\s*,\s*(\d+)%\s*\)$", color)
+    m = re.match(r"rgb\(\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*\)$", color)
     if m:
-        return (
-            int((int(m.group(1)) * 255) / 100.0 + 0.5),
-            int((int(m.group(2)) * 255) / 100.0 + 0.5),
-            int((int(m.group(3)) * 255) / 100.0 + 0.5),
-        )
+        values = tuple(int(value) for value in m.groups())
+        if max(values) <= 100:
+            return tuple(int((value * 255) / 100.0 + 0.5) for value in values)
 
     m = re.match(
-        r"hsl\(\s*(\d+\.?\d*)\s*,\s*(\d+\.?\d*)%\s*,\s*(\d+\.?\d*)%\s*\)$", color
+        r"hs[lbv]\(\s*(\d{1,3}(\.\d*)?)\s*,"
+        r"\s*(\d{1,3}(\.\d*)?)%\s*,\s*(\d{1,3}(\.\d*)?)%\s*\)$",
+        color,
     )
     if m:
-        from colorsys import hls_to_rgb
+        values = tuple(float(value) for value in m.groups()[::2])
+        if values[0] <= 360 and max(values[1], values[2]) <= 100:
+            if color[2] == "l":
+                from colorsys import hls_to_rgb
 
-        rgb = hls_to_rgb(
-            float(m.group(1)) / 360.0,
-            float(m.group(3)) / 100.0,
-            float(m.group(2)) / 100.0,
-        )
-        return (
-            int(rgb[0] * 255 + 0.5),
-            int(rgb[1] * 255 + 0.5),
-            int(rgb[2] * 255 + 0.5),
-        )
+                rgb = hls_to_rgb(
+                    values[0] / 360.0,
+                    values[2] / 100.0,
+                    values[1] / 100.0,
+                )
+            else:
+                from colorsys import hsv_to_rgb
+
+                rgb = hsv_to_rgb(
+                    values[0] / 360.0,
+                    values[1] / 100.0,
+                    values[2] / 100.0,
+                )
+            return (
+                int(rgb[0] * 255 + 0.5),
+                int(rgb[1] * 255 + 0.5),
+                int(rgb[2] * 255 + 0.5),
+            )
 
     m = re.match(
-        r"hs[bv]\(\s*(\d+\.?\d*)\s*,\s*(\d+\.?\d*)%\s*,\s*(\d+\.?\d*)%\s*\)$", color
+        r"rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$",
+        color,
     )
     if m:
-        from colorsys import hsv_to_rgb
-
-        rgb = hsv_to_rgb(
-            float(m.group(1)) / 360.0,
-            float(m.group(2)) / 100.0,
-            float(m.group(3)) / 100.0,
-        )
-        return (
-            int(rgb[0] * 255 + 0.5),
-            int(rgb[1] * 255 + 0.5),
-            int(rgb[2] * 255 + 0.5),
-        )
-
-    m = re.match(r"rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$", color)
-    if m:
-        return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4)))
+        values = tuple(int(value) for value in m.groups())
+        if max(values) <= 255:
+            return values
     raise ValueError(f"unknown color specifier: {repr(color)}")
 
 

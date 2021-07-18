@@ -115,46 +115,47 @@ def test_functions():
     assert (255, 0, 0) == ImageColor.getrgb("hsv(  0  ,  100%  ,  100%  )")
 
     # wrong number of components
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("rgb(255,0)")
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("rgb(255,0,0,0)")
+    for value in (
+        "(255,0)",
+        "(255,0,0,0)",
+        "(100%,0%)",
+        "(100%,0%,0)",
+        "(100%,0%,0 %)",
+        "(100%,0%,0%,0%)",
+        "(256,255,255)",
+        "(255,256,255)",
+        "(255,255,256)",
+        "(101%,100%,100%)",
+        "(100%,101%,100%)",
+        "(100%,100%,101%)",
+    ):
+        with pytest.raises(ValueError):
+            ImageColor.getrgb("rgb" + value)
 
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("rgb(100%,0%)")
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("rgb(100%,0%,0)")
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("rgb(100%,0%,0 %)")
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("rgb(100%,0%,0%,0%)")
+    for value in (
+        "(255,0,0)",
+        "(255,0,0,0,0)",
+        "(256,255,255,255)",
+        "(255,256,255,255)",
+        "(255,255,256,255)",
+        "(255,255,255,256)",
+    ):
+        with pytest.raises(ValueError):
+            ImageColor.getrgb("rgba" + value)
 
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("rgba(255,0,0)")
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("rgba(255,0,0,0,0)")
-
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("hsl(0,100%)")
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("hsl(0,100%,0%,0%)")
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("hsl(0%,100%,50%)")
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("hsl(0,100,50%)")
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("hsl(0,100%,50)")
-
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("hsv(0,100%)")
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("hsv(0,100%,0%,0%)")
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("hsv(0%,100%,50%)")
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("hsv(0,100,50%)")
-    with pytest.raises(ValueError):
-        ImageColor.getrgb("hsv(0,100%,50)")
+    for format in ("hsl", "hsb", "hsv"):
+        for value in (
+            "(0,100%)",
+            "(0,100%,0%,0%)",
+            "(0%,100%,50%)",
+            "(0,100,50%)",
+            "(0,100%,50)",
+            "(361,100%,100%)",
+            "(360,101%,100%)",
+            "(360,100%,101%)",
+        ):
+            with pytest.raises(ValueError):
+                ImageColor.getrgb(format + value)
 
 
 # look for rounding errors (based on code by Tim Hatch)
