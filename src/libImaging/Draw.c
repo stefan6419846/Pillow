@@ -5,7 +5,7 @@
  * a simple drawing package for the Imaging library
  *
  * history:
- * 1996-04-13 fl  Created.
+ * 1996-04-13 fl  Created
  * 1996-04-30 fl  Added transforms and polygon support.
  * 1996-08-12 fl  Added filled polygons.
  * 1996-11-05 fl  Fixed float/int confusion in polygon filler
