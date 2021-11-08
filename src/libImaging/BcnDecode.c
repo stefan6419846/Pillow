@@ -16,10 +16,6 @@
 #include "Bcn.h"
 
 typedef struct {
-    UINT8 r, g, b, a;
-} rgba;
-
-typedef struct {
     UINT8 l;
 } lum;
 
@@ -86,7 +82,6 @@ decode_bc1_color(rgba *dst, const UINT8 *src, int separate_alpha) {
     r1 = p[1].r;
     g1 = p[1].g;
     b1 = p[1].b;
-
 
     /* NOTE: BC2 and BC3 reuse BC1 color blocks but always act like c0 > c1 */
     if (col.c0 > col.c1 || separate_alpha) {
