@@ -24,13 +24,10 @@ pytestmark = skip_unless_feature("jpg_2000")
 
 
 def test_16bit_monochrome_jp2_like_tiff():
-    with Image.open("Tests/images/16bit.cropped.jp2") as x:
-        px = x.load()
-        print("first", px[0, 0])
-        print("x mode", x.mode)
-        print("---")
-        with Image.open("Tests/images/16bit.cropped.tif") as tiff_16bit:
-            px = tiff_16bit.load()
-            print("second", px[0, 0])
-            x.save("Tests/images/16bit.cropped.png")
-            assert_image_similar(tiff_16bit, x, 1e-3)
+    with Image.open("Tests/images/16bit.cropped.tif") as tiff_16bit:
+        assert_image_similar_tofile(tiff_16bit, "Tests/images/16bit.cropped.jp2", 1e-3)
+
+
+def test_16bit_monochrome_j2k_like_tiff():
+    with Image.open("Tests/images/16bit.cropped.tif") as tiff_16bit:
+        assert_image_similar_tofile(tiff_16bit, "Tests/images/16bit.cropped.j2k", 1e-3)
