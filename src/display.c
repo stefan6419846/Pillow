@@ -884,6 +884,7 @@ error:
 
 #ifdef HAVE_XCB
 #include <xcb/xcb.h>
+#include <xcb/xproto.h>
 
 /* -------------------------------------------------------------------- */
 /* X11 screen grabber */
