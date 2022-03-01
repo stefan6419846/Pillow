@@ -9,6 +9,7 @@
 # ------------------------------
 
 import os
+import platform
 import re
 import struct
 import subprocess
@@ -615,6 +616,11 @@ class pil_build_ext(build_ext):
                 _dbg("Adding %s to search list", best_path)
                 _add_directory(library_dirs, os.path.join(best_path, "lib"))
                 _add_directory(include_dirs, os.path.join(best_path, "include"))
+        else:
+            _add_directory(
+                library_dirs, "/opt/mozjpeg/lib" + platform.architecture()[0][:2]
+            )
+            _add_directory(include_dirs, "/opt/mozjpeg/include")
 
         #
         # insert new dirs *before* default libs, to avoid conflicts
