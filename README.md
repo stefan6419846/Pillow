@@ -68,6 +68,9 @@ As of 2019, Pillow development is
             <a href="https://tidelift.com/subscription/pkg/pypi-pillow?utm_source=pypi-pillow&utm_medium=badge"><img
                 alt="Tidelift"
                 src="https://tidelift.com/badges/package/pypi/Pillow?style=flat"></a>
+            <a href="https://bestpractices.coreinfrastructure.org/projects/6331"><img
+                alt="OpenSSF Best Practices"
+                src="https://bestpractices.coreinfrastructure.org/projects/6331/badge"></a>
             <a href="https://pypi.org/project/Pillow/"><img
                 alt="Newest PyPI version"
                 src="https://img.shields.io/pypi/v/pillow.svg"></a>
