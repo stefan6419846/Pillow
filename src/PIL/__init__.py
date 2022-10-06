@@ -78,3 +78,5 @@ class UnidentifiedImageError(OSError):
     """
 
     pass
+
+from . import _Image as Image
