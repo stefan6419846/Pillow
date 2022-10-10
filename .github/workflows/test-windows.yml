@@ -27,11 +27,12 @@ jobs:
       run: |
         echo "hello"
         ls
-        ./texconv.exe -f BC6H_SF16 -y Tests/images/hopper.png
+        ./texconv.exe -f BC6H_SF16 output/hopper.png
+        ./texconv.exe -ft png -y output/hopper.dds
       shell: pwsh
 
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
-        name: errors
-        path: Tests/images/hopper.dds
+        name: output
+        path: output
