@@ -707,6 +707,18 @@ class TestFileTiff:
             outfile = str(tmp_path / "temp.tif")
             im.save(outfile)
 
+    @pytest.mark.parametrize(
+        "color, expected", ((0, 0), (32767, 32767), (32768, -32768), (65535, -1))
+    )
+    def test_save_signed(self, color, expected, tmp_path):
+        outfile = str(tmp_path / "temp.tif")
+
+        im = Image.new("I;16", (1, 1), color)
+        im.save(outfile, signed=True)
+
+        with Image.open(outfile) as reloaded:
+            assert reloaded.getpixel((0, 0)) == expected
+
     def test_discard_icc_profile(self, tmp_path):
         outfile = str(tmp_path / "temp.tif")
 

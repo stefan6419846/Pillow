@@ -1081,6 +1081,12 @@ The :py:meth:`~PIL.Image.Image.save` method can take the following keyword argum
     ``"tiff_raw_16"``, ``"tiff_sgilog"``, ``"tiff_sgilog24"``, ``"tiff_thunderscan"``,
     ``"webp"``, ``"zstd"``
 
+**signed**
+    If true, and the image is not in F mode, then tell the encoder to save the image as
+    signed.
+
+    .. versionadded:: 10.0.0
+
 **quality**
     The image quality for JPEG compression, on a scale from 0 (worst) to 100
     (best). The default is 75.
