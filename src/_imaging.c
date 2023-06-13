@@ -1636,7 +1636,11 @@ if (PySequence_Check(op)) { \
                         Py_DECREF(seq);
                         return NULL;
                     }
-                    /* FIXME: what about scale and offset? */
+                    if (scale != 1.0 || offset != 0.0) {
+                        for (int j = 0; j < 4; j++) {
+                            u.ink[j] = (char)CLIP8((unsigned)u.ink[j] * scale + offset);
+                        }
+                    }
                     image->image32[y][x] = u.inkint;
                     if (++x >= (int)image->xsize) {
                         x = 0, y++;

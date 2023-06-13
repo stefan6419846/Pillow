@@ -55,8 +55,18 @@ def test_mode_with_L_with_float():
     assert im.getpixel((0, 0)) == 2
 
 
+def test_mode_RGB():
+    src = hopper()
+    data = list(src.getdata())
+    im = Image.new("RGB", src.size, 0)
+    im.putdata(data, 2, 3)
+
+    target = [tuple(min(2 * v + 3, 255) for v in elt) for elt in data]
+    assert list(im.getdata()) == target
+
+
 @pytest.mark.parametrize("mode", ("I", "I;16", "I;16L", "I;16B"))
-def test_mode_i(mode):
+def test_mode_I(mode):
     src = hopper("L")
     data = list(src.getdata())
     im = Image.new(mode, src.size, 0)
