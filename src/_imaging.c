@@ -1588,7 +1588,6 @@ if (PySequence_Check(op)) { \
                     x = 0, y++;
                 }
             }
-            PyErr_Clear(); /* Avoid weird exceptions */
         }
     } else {
         /* 32-bit images */
@@ -1608,7 +1607,6 @@ if (PySequence_Check(op)) { \
                         x = 0, y++;
                     }
                 }
-                PyErr_Clear(); /* Avoid weird exceptions */
                 break;
             case IMAGING_TYPE_FLOAT32:
                 for (i = x = y = 0; i < n; i++) {
@@ -1620,7 +1618,6 @@ if (PySequence_Check(op)) { \
                         x = 0, y++;
                     }
                 }
-                PyErr_Clear(); /* Avoid weird exceptions */
                 break;
             default:
                 for (i = x = y = 0; i < n; i++) {
@@ -1646,7 +1643,6 @@ if (PySequence_Check(op)) { \
                         x = 0, y++;
                     }
                 }
-                PyErr_Clear(); /* Avoid weird exceptions */
                 break;
         }
     }
