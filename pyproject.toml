@@ -125,3 +125,79 @@ known-first-party = ["PIL"]
 [tool.pytest.ini_options]
 addopts = "-ra --color=yes"
 testpaths = ["Tests"]
+
+[tool.mypy]
+python_version = "3.8"
+pretty = true
+disallow_any_generics = true
+enable_error_code = "ignore-without-code"
+extra_checks = true
+follow_imports = "silent"
+warn_redundant_casts = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+exclude = [
+  '^src/PIL/_tkinter_finder.py$',
+  '^src/PIL/BlpImagePlugin.py$',
+  '^src/PIL/BmpImagePlugin.py$',
+  '^src/PIL/BufrStubImagePlugin.py$',
+  '^src/PIL/CurImagePlugin.py$',
+  '^src/PIL/DcxImagePlugin.py$',
+  '^src/PIL/DdsImagePlugin.py$',
+  '^src/PIL/EpsImagePlugin.py$',
+  '^src/PIL/FitsImagePlugin.py$',
+  '^src/PIL/FliImagePlugin.py$',
+  '^src/PIL/FpxImagePlugin.py$',
+  '^src/PIL/FtexImagePlugin.py$',
+  '^src/PIL/GbrImagePlugin.py$',
+  '^src/PIL/GdImageFile.py$',
+  '^src/PIL/GifImagePlugin.py$',
+  '^src/PIL/GribStubImagePlugin.py$',
+  '^src/PIL/Hdf5StubImagePlugin.py$',
+  '^src/PIL/IcnsImagePlugin.py$',
+  '^src/PIL/IcoImagePlugin.py$',
+  '^src/PIL/Image.py$',
+  '^src/PIL/ImageCms.py$',
+  '^src/PIL/ImageFile.py$',
+  '^src/PIL/ImageFilter.py$',
+  '^src/PIL/ImageFont.py$',
+  '^src/PIL/ImageMath.py$',
+  '^src/PIL/ImageMorph.py$',
+  '^src/PIL/ImageQt.py$',
+  '^src/PIL/ImageSequence.py$',
+  '^src/PIL/ImageShow.py$',
+  '^src/PIL/ImImagePlugin.py$',
+  '^src/PIL/ImtImagePlugin.py$',
+  '^src/PIL/IptcImagePlugin.py$',
+  '^src/PIL/Jpeg2KImagePlugin.py$',
+  '^src/PIL/JpegImagePlugin.py$',
+  '^src/PIL/McIdasImagePlugin.py$',
+  '^src/PIL/MicImagePlugin.py$',
+  '^src/PIL/MpegImagePlugin.py$',
+  '^src/PIL/MpoImagePlugin.py$',
+  '^src/PIL/MspImagePlugin.py$',
+  '^src/PIL/PalmImagePlugin.py$',
+  '^src/PIL/PcdImagePlugin.py$',
+  '^src/PIL/PcxImagePlugin.py$',
+  '^src/PIL/PdfImagePlugin.py$',
+  '^src/PIL/PdfParser.py$',
+  '^src/PIL/PixarImagePlugin.py$',
+  '^src/PIL/PngImagePlugin.py$',
+  '^src/PIL/PpmImagePlugin.py$',
+  '^src/PIL/PsdImagePlugin.py$',
+  '^src/PIL/PyAccess.py$',
+  '^src/PIL/QoiImagePlugin.py$',
+  '^src/PIL/SgiImagePlugin.py$',
+  '^src/PIL/SpiderImagePlugin.py$',
+  '^src/PIL/SunImagePlugin.py$',
+  '^src/PIL/TgaImagePlugin.py$',
+  '^src/PIL/TiffImagePlugin.py$',
+  '^src/PIL/TiffTags.py$',
+  '^src/PIL/WalImageFile.py$',
+  '^src/PIL/WebPImagePlugin.py$',
+  '^src/PIL/WmfImagePlugin.py$',
+  '^src/PIL/XbmImagePlugin.py$',
+  '^src/PIL/XpmImagePlugin.py$',
+  '^src/PIL/XVThumbImagePlugin.py$',
+]
