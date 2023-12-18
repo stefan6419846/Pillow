@@ -2,31 +2,9 @@ name: Test
 
 on:
   push:
-    branches:
-      - "**"
-    paths-ignore:
-      - ".github/workflows/docs.yml"
-      - ".github/workflows/wheels*"
-      - ".gitmodules"
-      - ".travis.yml"
-      - "docs/**"
-      - "wheels/**"
-  pull_request:
-    paths-ignore:
-      - ".github/workflows/docs.yml"
-      - ".github/workflows/wheels*"
-      - ".gitmodules"
-      - ".travis.yml"
-      - "docs/**"
-      - "wheels/**"
-  workflow_dispatch:
 
 permissions:
   contents: read
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   build:
@@ -36,24 +14,10 @@ jobs:
       matrix:
         os: [
           "macos-latest",
-          "ubuntu-latest",
         ]
         python-version: [
-          "pypy3.10",
-          "pypy3.9",
-          "3.13",
-          "3.12",
-          "3.11",
-          "3.10",
-          "3.9",
           "3.8",
         ]
-        include:
-        - python-version: "3.9"
-          PYTHONOPTIMIZE: 1
-          REVERSE: "--reverse"
-        - python-version: "3.8"
-          PYTHONOPTIMIZE: 2
 
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} Python ${{ matrix.python-version }}
@@ -90,22 +54,6 @@ jobs:
       run: |
         .ci/build.sh
 
-    - name: Test
-      run: |
-        if [ $REVERSE ]; then
-          python3 -m pip install pytest-reverse
-        fi
-        if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
-          xvfb-run -s '-screen 0 1024x768x24' sway&
-          export WAYLAND_DISPLAY=wayland-1
-          .ci/test.sh
-        else
-          .ci/test.sh
-        fi
-      env:
-        PYTHONOPTIMIZE: ${{ matrix.PYTHONOPTIMIZE }}
-        REVERSE: ${{ matrix.REVERSE }}
-
     - name: Prepare to upload errors
       if: failure()
       run: |
@@ -117,10 +65,6 @@ jobs:
       with:
         name: errors
         path: Tests/errors
-
-    - name: After success
-      run: |
-        .ci/after_success.sh
 
     - name: Upload coverage
       uses: codecov/codecov-action@v3

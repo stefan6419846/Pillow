@@ -2,6 +2,7 @@
 build-backend = "backend"
 requires = [
   "setuptools>=67.8",
+  "setuptools_scm>=8"
 ]
 backend-path = [
   "_custom_build",
@@ -83,9 +84,6 @@ packages = ["PIL"]
 include-package-data = true
 package-dir = {"" = "src"}
 
-[tool.setuptools.dynamic]
-version = {attr = "PIL.__version__"}
-
 [tool.cibuildwheel]
 before-all = ".github/workflows/wheels-dependencies.sh"
 build-verbosity = 1
@@ -121,6 +119,8 @@ extend-ignore = [
 
 [tool.ruff.isort]
 known-first-party = ["PIL"]
+
+[tool.setuptools_scm]
 
 [tool.pytest.ini_options]
 addopts = "-ra --color=yes"
