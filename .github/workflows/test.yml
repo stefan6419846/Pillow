@@ -26,8 +26,62 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-tags: true
-        fetch-depth: 1
+        fetch-depth: 0
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        allow-prereleases: true
+        cache: pip
+        cache-dependency-path: ".ci/*.sh"
 
     - name: Build system information
+      run: python3 .github/workflows/system-info.py
+
+    - name: Install Linux dependencies
+      if: startsWith(matrix.os, 'ubuntu')
       run: |
-        git tag
+        .ci/install.sh
+      env:
+        GHA_PYTHON_VERSION: ${{ matrix.python-version }}
+
+    - name: Install macOS dependencies
+      if: startsWith(matrix.os, 'macOS')
+      run: |
+        .github/workflows/macos-install.sh
+      env:
+        GHA_PYTHON_VERSION: ${{ matrix.python-version }}
+
+    - name: Build
+      run: |
+        .ci/build.sh
+
+    - name: Prepare to upload errors
+      if: failure()
+      run: |
+        mkdir -p Tests/errors
+
+    - name: Upload errors
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: errors
+        path: Tests/errors
+
+    - name: Upload coverage
+      uses: codecov/codecov-action@v3
+      with:
+        flags: ${{ matrix.os == 'macos-latest' && 'GHA_macOS' || 'GHA_Ubuntu' }}
+        name: ${{ matrix.os }} Python ${{ matrix.python-version }}
+        gcov: true
+
+  success:
+    permissions:
+      contents: none
+    needs: build
+    runs-on: ubuntu-latest
+    name: Test Successful
+    steps:
+      - name: Success
+        run: echo Test Successful
