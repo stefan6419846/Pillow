@@ -14,15 +14,13 @@ Use PIL.__version__ for this Pillow version.
 """
 from __future__ import annotations
 
-from . import Image, _version
+from . import _version
 
 # VERSION was removed in Pillow 6.0.0.
 # PILLOW_VERSION was removed in Pillow 9.0.0.
 # Use __version__ instead.
 __version__ = _version.__version__
 del _version
-
-ImageType = Image.Image
 
 
 _plugins = [
