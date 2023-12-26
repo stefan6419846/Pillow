@@ -53,12 +53,10 @@ from . import (
     ExifTags,
     ImageMode,
     TiffTags,
-    UnidentifiedImageError,
-    __version__,
-    _plugins,
 )
 from ._binary import i32le, o32be, o32le
 from ._util import DeferredError, is_path
+from ._version import __version__
 
 logger = logging.getLogger(__name__)
 
@@ -356,6 +354,8 @@ def init():
     global _initialized
     if _initialized >= 2:
         return 0
+
+    from . import _plugins
 
     parent_name = __name__.rpartition(".")[0]
     for plugin in _plugins:
@@ -3301,6 +3301,8 @@ def open(fp, mode="r", formats=None):
     if im:
         im._exclusive_fp = exclusive_fp
         return im
+
+    from . import UnidentifiedImageError
 
     if exclusive_fp:
         fp.close()

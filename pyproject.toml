@@ -84,7 +84,7 @@ include-package-data = true
 package-dir = {"" = "src"}
 
 [tool.setuptools.dynamic]
-version = {attr = "PIL.__version__"}
+version = {attr = "PIL._version.__version__"}
 
 [tool.cibuildwheel]
 before-all = ".github/workflows/wheels-dependencies.sh"

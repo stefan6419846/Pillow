@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import warnings
 
-from . import __version__
+from ._version import __version__
 
 
 def deprecate(
