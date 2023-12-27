@@ -14,11 +14,35 @@ jobs:
       fail-fast: false
       matrix:
         docker: [
+          # Run slower jobs first to give them a headstart and reduce waiting time
+          ubuntu-22.04-jammy-arm64v8,
+          ubuntu-22.04-jammy-ppc64le,
+          ubuntu-22.04-jammy-s390x,
+          # Then run the remainder
           alpine,
           amazon-2-amd64,
           amazon-2023-amd64,
+          arch,
+          centos-7-amd64,
+          centos-stream-8-amd64,
+          centos-stream-9-amd64,
+          debian-11-bullseye-amd64,
+          debian-12-bookworm-x86,
+          debian-12-bookworm-amd64,
+          fedora-38-amd64,
+          fedora-39-amd64,
+          gentoo,
+          ubuntu-20.04-focal-amd64,
+          ubuntu-22.04-jammy-amd64,
         ]
         dockerTag: [main]
+        include:
+          - docker: "ubuntu-22.04-jammy-arm64v8"
+            qemu-arch: "aarch64"
+          - docker: "ubuntu-22.04-jammy-ppc64le"
+            qemu-arch: "ppc64le"
+          - docker: "ubuntu-22.04-jammy-s390x"
+            qemu-arch: "s390x"
 
     name: ${{ matrix.docker }}
 
@@ -48,7 +72,11 @@ jobs:
       run: |
         PATH="$PATH:~/.local/bin"
         docker start pillow_container
+        echo "torch"
         pil_path=`docker exec pillow_container /vpy3/bin/python -c 'import os, PIL;print(os.path.realpath(os.path.dirname(PIL.__file__)))'`
+        echo $pil_path
+        pil_path1=`docker exec pillow_container /vpy3/bin/python -c 'import sysconfig;print(sysconfig.get_path("platlib"))'`
+        echo $pil_path1
         docker stop pillow_container
         sudo mkdir -p $pil_path
         sudo cp src/PIL/*.py $pil_path
