@@ -154,5 +154,4 @@ exclude = [
   '^src/PIL/PyAccess.py$',
   '^src/PIL/TiffImagePlugin.py$',
   '^src/PIL/TiffTags.py$',
-  '^src/PIL/WebPImagePlugin.py$',
 ]

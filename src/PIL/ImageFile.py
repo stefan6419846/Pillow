@@ -28,13 +28,15 @@
 #
 from __future__ import annotations
 
+import abc
 import io
 import itertools
 import struct
 import sys
 from typing import Any, NamedTuple
 
-from . import Image
+from . import Image, PyAccess
+from . import _imaging as core
 from ._deprecate import deprecate
 from ._util import is_path
 
@@ -105,6 +107,9 @@ class _Tile(NamedTuple):
 class ImageFile(Image.Image):
     """Base class for image file format handlers."""
 
+    n_frames: int
+    tile_prefix: bytes
+
     def __init__(self, fp=None, filename=None):
         super().__init__()
 
@@ -172,7 +177,7 @@ class ImageFile(Image.Image):
             self.fp.close()
         self.fp = None
 
-    def load(self):
+    def load(self) -> core.PixelAccessObject | PyAccess.PyAccess | None:
         """Load image data based on tile list"""
 
         if self.tile is None:
@@ -323,15 +328,17 @@ class ImageFile(Image.Image):
         # may be overridden
         pass
 
-    # may be defined for contained formats
-    # def load_seek(self, pos):
-    #     pass
+    @abc.abstractmethod
+    def load_seek(self, pos: int) -> None:
+        # may be defined for contained formats
+        pass
 
-    # may be defined for blocked formats (e.g. PNG)
-    # def load_read(self, bytes):
-    #     pass
+    @abc.abstractmethod
+    def load_read(self, read_bytes: int) -> bytes:
+        # may be defined for blocked formats (e.g. PNG)
+        pass
 
-    def _seek_check(self, frame):
+    def _seek_check(self, frame) -> bool:
         if (
             frame < self._min_frame
             # Only check upper limit on frames if additional seek operations

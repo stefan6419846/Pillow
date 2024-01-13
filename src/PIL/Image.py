@@ -40,6 +40,7 @@ import warnings
 from collections.abc import Callable, MutableMapping
 from enum import IntEnum
 from pathlib import Path
+from typing import Any
 
 try:
     from defusedxml import ElementTree
@@ -52,6 +53,7 @@ except ImportError:
 from . import (
     ExifTags,
     ImageMode,
+    PyAccess,
     TiffTags,
     UnidentifiedImageError,
     __version__,
@@ -708,7 +710,7 @@ class Image:
             self.putpalette(palette)
         self.frombytes(data)
 
-    def tobytes(self, encoder_name="raw", *args):
+    def tobytes(self, encoder_name="raw", *args) -> bytes:
         """
         Return image as a bytes object.
 
@@ -817,7 +819,7 @@ class Image:
             msg = "cannot decode image data"
             raise ValueError(msg)
 
-    def load(self):
+    def load(self) -> core.PixelAccessObject | PyAccess.PyAccess | None:
         """
         Allocates storage for the image and loads the pixel data.  In
         normal cases, you don't need to call this method, since the
@@ -859,6 +861,7 @@ class Image:
                 if self.pyaccess:
                     return self.pyaccess
             return self.im.pixel_access(self.readonly)
+        return None
 
     def verify(self):
         """
@@ -1385,7 +1388,7 @@ class Image:
             return tuple(self.im.getband(i).getextrema() for i in range(self.im.bands))
         return self.im.getextrema()
 
-    def _getxmp(self, xmp_tags):
+    def _getxmp(self, xmp_tags) -> dict[str, Any]:
         def get_name(tag):
             return re.sub("^{[^}]+}", "", tag)
 
@@ -1416,7 +1419,7 @@ class Image:
             root = ElementTree.fromstring(xmp_tags)
             return {get_name(root.tag): get_value(root)}
 
-    def getexif(self):
+    def getexif(self) -> Exif:
         """
         Gets EXIF data from the image.
 
@@ -1511,7 +1514,7 @@ class Image:
         self.load()
         return self.im.ptr
 
-    def getpalette(self, rawmode="RGB"):
+    def getpalette(self, rawmode="RGB") -> list[int] | None:
         """
         Returns the image palette as a list.
 
@@ -2449,7 +2452,7 @@ class Image:
         if open_fp:
             fp.close()
 
-    def seek(self, frame) -> Image:
+    def seek(self, frame) -> None:
         """
         Seeks to the given frame in this sequence file. If you seek
         beyond the end of the sequence, the method raises an
@@ -3435,7 +3438,7 @@ def register_open(id, factory, accept=None) -> None:
     OPEN[id] = factory, accept
 
 
-def register_mime(id, mimetype):
+def register_mime(id, mimetype) -> None:
     """
     Registers an image MIME type by populating ``Image.MIME``. This function
     should not be used in application code.
@@ -3450,7 +3453,7 @@ def register_mime(id, mimetype):
     MIME[id.upper()] = mimetype
 
 
-def register_save(id, driver):
+def register_save(id, driver) -> None:
     """
     Registers an image save function.  This function should not be
     used in application code.
@@ -3461,7 +3464,7 @@ def register_save(id, driver):
     SAVE[id.upper()] = driver
 
 
-def register_save_all(id, driver):
+def register_save_all(id, driver) -> None:
     """
     Registers an image function to save all the frames
     of a multiframe format.  This function should not be
@@ -3763,7 +3766,7 @@ class Exif(MutableMapping):
         self.fp.seek(offset)
         self._info.load(self.fp)
 
-    def _get_merged_dict(self):
+    def _get_merged_dict(self) -> dict[str, Any]:
         merged_dict = dict(self)
 
         # get EXIF extension
@@ -3780,7 +3783,7 @@ class Exif(MutableMapping):
 
         return merged_dict
 
-    def tobytes(self, offset=8):
+    def tobytes(self, offset=8) -> bytes:
         from . import TiffImagePlugin
 
         head = self._get_head()

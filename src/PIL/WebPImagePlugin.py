@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from io import BytesIO
+from typing import Any
 
-from . import Image, ImageFile
+from . import Image, ImageFile, PyAccess
+from . import _imaging as core
 
 try:
     from . import _webp
@@ -23,7 +25,7 @@ _VP8_MODES_BY_IDENTIFIER = {
 }
 
 
-def _accept(prefix):
+def _accept(prefix: bytes) -> str | bool | None:
     is_riff_file_format = prefix[:4] == b"RIFF"
     is_webp_file = prefix[8:12] == b"WEBP"
     is_valid_vp8_mode = prefix[12:16] in _VP8_MODES_BY_IDENTIFIER
@@ -34,6 +36,7 @@ def _accept(prefix):
                 "image file could not be identified because WEBP support not installed"
             )
         return True
+    return None
 
 
 class WebPImageFile(ImageFile.ImageFile):
@@ -42,7 +45,9 @@ class WebPImageFile(ImageFile.ImageFile):
     __loaded = 0
     __logical_frame = 0
 
-    def _open(self):
+    def _open(self) -> None:
+        assert self.fp is not None
+
         if not _webp.HAVE_WEBPANIM:
             # Legacy mode
             data, width, height, self._mode, icc_profile, exif = _webp.WebPDecode(
@@ -94,12 +99,12 @@ class WebPImageFile(ImageFile.ImageFile):
         # Initialize seek state
         self._reset(reset=False)
 
-    def _getexif(self):
+    def _getexif(self) -> dict[str, Any] | None:
         if "exif" not in self.info:
             return None
         return self.getexif()._get_merged_dict()
 
-    def getxmp(self):
+    def getxmp(self) -> dict[str, Any]:
         """
         Returns a dictionary containing the XMP tags.
         Requires defusedxml to be installed.
@@ -108,21 +113,21 @@ class WebPImageFile(ImageFile.ImageFile):
         """
         return self._getxmp(self.info["xmp"]) if "xmp" in self.info else {}
 
-    def seek(self, frame):
+    def seek(self, frame: int) -> None:
         if not self._seek_check(frame):
             return
 
         # Set logical frame to requested position
         self.__logical_frame = frame
 
-    def _reset(self, reset=True):
+    def _reset(self, reset: bool = True) -> None:
         if reset:
             self._decoder.reset()
         self.__physical_frame = 0
         self.__loaded = -1
         self.__timestamp = 0
 
-    def _get_next(self):
+    def _get_next(self) -> tuple[bytes, int, int]:
         # Get next frame
         ret = self._decoder.get_next()
         self.__physical_frame += 1
@@ -143,7 +148,7 @@ class WebPImageFile(ImageFile.ImageFile):
         timestamp -= duration
         return data, timestamp, duration
 
-    def _seek(self, frame):
+    def _seek(self, frame: int) -> None:
         if self.__physical_frame == frame:
             return  # Nothing to do
         if frame < self.__physical_frame:
@@ -151,7 +156,7 @@ class WebPImageFile(ImageFile.ImageFile):
         while self.__physical_frame < frame:
             self._get_next()  # Advance to the requested frame
 
-    def load(self):
+    def load(self) -> core.PixelAccessObject | PyAccess.PyAccess | None:
         if _webp.HAVE_WEBPANIM:
             if self.__loaded != self.__logical_frame:
                 self._seek(self.__logical_frame)
@@ -170,17 +175,17 @@ class WebPImageFile(ImageFile.ImageFile):
 
         return super().load()
 
-    def load_seek(self, pos):
+    def load_seek(self, pos: int) -> None:
         pass
 
-    def tell(self):
+    def tell(self) -> int:
         if not _webp.HAVE_WEBPANIM:
             return super().tell()
 
         return self.__logical_frame
 
 
-def _save_all(im, fp, filename):
+def _save_all(im: Image.Image, fp: BytesIO, filename: str) -> None:
     encoderinfo = im.encoderinfo.copy()
     append_images = list(encoderinfo.get("append_images", []))
 
@@ -193,7 +198,7 @@ def _save_all(im, fp, filename):
         _save(im, fp, filename)
         return
 
-    background = (0, 0, 0, 0)
+    background: list[int] | tuple[int, ...] | int = (0, 0, 0, 0)
     if "background" in encoderinfo:
         background = encoderinfo["background"]
     elif "background" in im.info:
@@ -321,7 +326,7 @@ def _save_all(im, fp, filename):
     fp.write(data)
 
 
-def _save(im, fp, filename):
+def _save(im: Image.Image, fp: BytesIO, filename: str) -> None:
     lossless = im.encoderinfo.get("lossless", False)
     quality = im.encoderinfo.get("quality", 80)
     icc_profile = im.encoderinfo.get("icc_profile") or ""
