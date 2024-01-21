@@ -42,7 +42,7 @@ intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
 
 # io.BytesIO is incorrectly converted to _io.BytesIO, this alias prevents that
 autodoc_type_aliases = {
-    "BytesIO": "~io.BytesIO",
+    "BytesIO": "io.BytesIO",
 }
 
 # The suffix(es) of source filenames.

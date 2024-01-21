@@ -2,23 +2,11 @@ name: Docs
 
 on:
   push:
-    branches:
-      - "**"
-    paths:
-      - ".github/workflows/docs.yml"
-      - "docs/**"
   pull_request:
-    paths:
-      - ".github/workflows/docs.yml"
-      - "docs/**"
   workflow_dispatch:
 
 permissions:
   contents: read
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 env:
   FORCE_COLOR: 1
