@@ -135,7 +135,7 @@ if [[ -n "$IS_MACOS" ]]; then
   # remove lcms2 and libpng to fix building openjpeg on arm64
   # remove zstd to avoid inclusion on x86_64
   # curl from brew requires zstd, use system curl
-  brew remove --ignore-dependencies webp libpng libtiff libxcb libxau libxdmcp curl php cairo lcms2 ghostscript zstd
+  brew remove --ignore-dependencies webp libpng libtiff libxcb libxdmcp curl php cairo lcms2 ghostscript zstd
 
   brew install pkg-config
 fi
