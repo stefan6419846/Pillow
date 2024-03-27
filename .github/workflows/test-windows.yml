@@ -57,6 +57,10 @@ jobs:
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
 
+    - name: Emulate
+      run: |
+        docker run --rm --privileged aptman/qus -s -- -p i386
+
     # sets env: pythonLocation
     - name: Set up Python
       uses: actions/setup-python@v5
